@@ -4,6 +4,7 @@
 
 USING_NS_CC;
 
+
 static cocos2d::Size designResolutionSize = cocos2d::Size(480, 320);
 static cocos2d::Size smallResolutionSize = cocos2d::Size(480, 320);
 static cocos2d::Size mediumResolutionSize = cocos2d::Size(1024, 768);
@@ -38,6 +39,7 @@ static int register_all_packages()
 bool AppDelegate::applicationDidFinishLaunching() {
 
     sdkbox::PluginFlurryAnalytics::init();
+    sdkbox::PluginFlurryAnalytics::startSession();
 
     // initialize director
     auto director = Director::getInstance();
@@ -86,6 +88,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
 // This function will be called when the app is inactive. When comes a phone call,it's be invoked too
 void AppDelegate::applicationDidEnterBackground() {
     Director::getInstance()->stopAnimation();
+    sdkbox::PluginFlurryAnalytics::endSession();
 
     // if you use SimpleAudioEngine, it must be pause
     // SimpleAudioEngine::getInstance()->pauseBackgroundMusic();

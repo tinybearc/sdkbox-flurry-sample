@@ -16,9 +16,9 @@
                     "OriginVersion": "v0.1"
                 }
             ], 
-            "APIKey": "W5ZVZHBPY3K4QSY3TG77", 
+            "APIKey": "NPGG5X29SSWM4GXK6HFN",
             "DefLocationLat": 104.06, 
-            "Level": 2, 
+            "Level": 1,
             "AppVersion": "V0.1", 
             "Pulse": true, 
             "LocationReport": true, 
@@ -26,17 +26,17 @@
             "LogEvent": true, 
             "SessionTimeout": 10, 
             "CrashReport": true, 
-            "Debug": false
+            "Debug": true
         }
     }, 
     "ios": {
         "FlurryAnalytics": {
-            "APIKey": "GCFCB72BPD76GHXWQZWT", 
-            "Level": 2, 
+            "APIKey": "DYWCHGR5K8M5FQNXZ49Y",
+            "Level": 1,
             "AppVersion": "V0.1", 
             "SessionTimeout": 10, 
             "CrashReport": true, 
-            "Debug": false
+            "Debug": true
         }
     }
 }

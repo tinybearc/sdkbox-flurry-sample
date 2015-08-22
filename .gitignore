@@ -7,6 +7,9 @@ obj/
 gen/
 assets/
 local.properties
+gdbserver
+gdb.setup
+*.so
 
 # Xcode
 .DS_Store
