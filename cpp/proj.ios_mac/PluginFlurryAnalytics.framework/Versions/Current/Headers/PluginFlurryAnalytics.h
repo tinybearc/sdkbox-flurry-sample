@@ -48,8 +48,6 @@ namespace sdkbox {
     class PluginFlurryAnalytics
     {
     public:
-        ~PluginFlurryAnalytics();
-
         /*!
          * init plugin, must be first invoke
          */
