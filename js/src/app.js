@@ -64,6 +64,23 @@ var HelloWorldLayer = cc.Layer.extend({
                 cc.tintTo(2.5,255,125,0)
             )
         );
+
+        sdkbox.PluginFlurryAnalytics.setListener({
+            flurrySessionDidCreateWithInfo:function(info) {
+                var jsonInfo = JSON.parse(info)
+                console.log("session started")
+                console.log("APIKey :" + jsonInfo.apiKey + " session id :" + jsonInfo.sessionId);
+                sdkbox.PluginFlurryAnalytics.logEvent("js session create", JSON.stringify({"eKey1":"eVal1", "eKey2":"eVal2"}));
+                sdkbox.PluginFlurryAnalytics.logEvent("Test Event jsproject")
+            }
+        })
+        var suc = sdkbox.PluginFlurryAnalytics.init()
+        if (!suc) {
+            cc.log("Flurry Analytics init fail")
+            return
+        }
+        sdkbox.PluginFlurryAnalytics.setShowErrorInLogEnabled(true)
+
         return true;
     }
 });
