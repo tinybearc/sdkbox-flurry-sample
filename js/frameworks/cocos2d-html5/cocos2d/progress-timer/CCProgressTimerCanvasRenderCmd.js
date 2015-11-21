@@ -72,13 +72,13 @@
         }
 
         //clip
-        if (node._type === cc.ProgressTimer.TYPE_BAR) {
+        if (node._type == cc.ProgressTimer.TYPE_BAR) {
             var locBarRect = this._barRect;
             context.beginPath();
             context.rect(locBarRect.x * scaleX, locBarRect.y * scaleY, locBarRect.width * scaleX, locBarRect.height * scaleY);
             context.clip();
             context.closePath();
-        } else if (node._type === cc.ProgressTimer.TYPE_RADIAL) {
+        } else if (node._type == cc.ProgressTimer.TYPE_RADIAL) {
             var locOriginX = this._origin.x * scaleX;
             var locOriginY = this._origin.y * scaleY;
             context.beginPath();
@@ -90,7 +90,7 @@
 
         //draw sprite
         var image = locSprite._texture.getHtmlElementObj();
-        if (locSprite._renderCmd._colorized) {
+        if (locSprite._colorized) {
             context.drawImage(image,
                 0, 0, locTextureCoord.width, locTextureCoord.height,
                 locX * scaleX, locY * scaleY, locWidth * scaleX, locHeight * scaleY);
@@ -113,7 +113,7 @@
         var sw = locSprite.width, sh = locSprite.height;
         var locMidPoint = node._midPoint;
 
-        if (node._type === cc.ProgressTimer.TYPE_RADIAL) {
+        if (node._type == cc.ProgressTimer.TYPE_RADIAL) {
             this._radius = Math.round(Math.sqrt(sw * sw + sh * sh));
             var locStartAngle, locEndAngle, locCounterClockWise = false, locOrigin = this._origin;
             locOrigin.x = sw * locMidPoint.x;
@@ -226,10 +226,10 @@
             spriteCmd._syncDisplayOpacity();
         }
 
-        if(colorDirty || opacityDirty){
+/*        if(colorDirty || opacityDirty){
             spriteCmd._updateColor();
-            //this._updateColor();
-        }
+            this._updateColor();
+        }*/
 
         if (locFlag & flags.transformDirty) {
             //update the transform
@@ -256,10 +256,10 @@
             spriteCmd._updateDisplayOpacity();
         }
 
-        if(colorDirty || opacityDirty){
+/*        if(colorDirty || opacityDirty){
             spriteCmd._updateColor();
-            //this._updateColor();
-        }
+            this._updateColor();
+        }*/
 
         if(locFlag & flags.transformDirty){
             //update the transform

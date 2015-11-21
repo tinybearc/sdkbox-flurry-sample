@@ -23,8 +23,6 @@
  ****************************************************************************/
 
 (function() {
-    if(!cc.Node.WebGLRenderCmd)
-        return;
     ccui.Scale9Sprite.WebGLRenderCmd = function (renderable) {
         cc.Node.WebGLRenderCmd.call(this, renderable);
         this._cachedParent = null;

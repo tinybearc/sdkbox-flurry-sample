@@ -46,7 +46,7 @@ cc.DrawingPrimitiveWebGL = cc.Class.extend(/** @lends cc.DrawingPrimitiveWebGL# 
             ctx = cc._renderContext;
 
         if (!ctx instanceof  WebGLRenderingContext)
-            throw new Error("Can't initialise DrawingPrimitiveWebGL. context need is WebGLRenderingContext");
+            throw "Can't initialise DrawingPrimitiveWebGL. context need is WebGLRenderingContext";
 
         this._renderContext = ctx;
         this._colorArray = new Float32Array([1.0, 1.0, 1.0, 1.0]);
@@ -104,7 +104,7 @@ cc.DrawingPrimitiveWebGL = cc.Class.extend(/** @lends cc.DrawingPrimitiveWebGL# 
      * @param {Number} numberOfPoints
      */
     drawPoints:function (points, numberOfPoints) {
-        if (!points || points.length === 0)
+        if (!points || points.length == 0)
             return;
 
         this.lazy_init();
@@ -395,7 +395,7 @@ cc.DrawingPrimitiveWebGL = cc.Class.extend(/** @lends cc.DrawingPrimitiveWebGL# 
             var dt = i / segments;
 
             // border
-            if (dt === 1) {
+            if (dt == 1) {
                 p = config.length - 1;
                 lt = 1;
             } else {
@@ -403,7 +403,7 @@ cc.DrawingPrimitiveWebGL = cc.Class.extend(/** @lends cc.DrawingPrimitiveWebGL# 
                 lt = (dt - deltaT * p) / deltaT;
             }
 
-            var newPos = cc.cardinalSplineAt(
+            var newPos = cc.CardinalSplineAt(
                 cc.getControlPointAt(config, p - 1),
                 cc.getControlPointAt(config, p),
                 cc.getControlPointAt(config, p + 1),

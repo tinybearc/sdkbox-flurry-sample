@@ -68,18 +68,17 @@ ccui.LabelBMFont = ccui.TextBMFont = ccui.Widget.extend(/** @lends ccui.TextBMFo
     setFntFile: function (fileName) {
         if (!fileName)
             return;
-        this._fntFileName = fileName;
-
-        this._fntFileHasInit = true;
-        this._labelBMFontRenderer.initWithString(this._stringValue, fileName);
-        this._updateContentSizeWithTextureSize(this._labelBMFontRenderer.getContentSize());
-        this._labelBMFontRendererAdaptDirty = true;
 
         var _self = this;
+        _self._fntFileName = fileName;
+
+        _self._fntFileHasInit = true;
+        _self._labelBMFontRenderer.initWithString(this._stringValue, fileName);
+
         var locRenderer = _self._labelBMFontRenderer;
         if(!locRenderer._textureLoaded){
              locRenderer.addEventListener("load", function(){
-                 _self.setFntFile(_self._fntFileName);
+                 _self.setFntFile(fileName);
              });
         }
     },
@@ -99,12 +98,12 @@ ccui.LabelBMFont = ccui.TextBMFont = ccui.Widget.extend(/** @lends ccui.TextBMFo
      * @param {String} value
      */
     setString: function (value) {
-        if(value === this._labelBMFontRenderer.getString())
+        if(value == this._labelBMFontRenderer.getString())
             return;
         this._stringValue = value;
-        this._labelBMFontRenderer.setString(value);
         if (!this._fntFileHasInit)
             return;
+        this._labelBMFontRenderer.setString(value);
         this._updateContentSizeWithTextureSize(this._labelBMFontRenderer.getContentSize());
         this._labelBMFontRendererAdaptDirty = true;
     },

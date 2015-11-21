@@ -78,7 +78,7 @@
             var i, len, selChildren, item;
             if (this._cascadeOpacityEnabledDirty && !node._cascadeOpacityEnabled) {
                 this._displayedOpacity = node._realOpacity;
-                selChildren = node._children;
+                selChildren = this._children;
                 for (i = 0, len = selChildren.length; i < len; i++) {
                     item = selChildren[i];
                     if (item && item._renderCmd)
@@ -206,16 +206,22 @@
             node._changePosition();
 
         var t = node.getNodeToParentTransform(), worldT = this._worldTransform;
-        if (parentCmd) {
+        if(parentCmd){
             var pt = parentCmd._worldTransform;
-            // cc.AffineTransformConcat is incorrect at get world transform
             worldT.a = t.a * pt.a + t.b * pt.c;                               //a
             worldT.b = t.a * pt.b + t.b * pt.d;                               //b
             worldT.c = t.c * pt.a + t.d * pt.c;                               //c
             worldT.d = t.c * pt.b + t.d * pt.d;                               //d
-
-            worldT.tx = pt.a * t.tx + pt.c * t.ty + pt.tx;
-            worldT.ty = pt.d * t.ty + pt.ty + pt.b * t.tx;
+            if(node._skewX || node._skewY){
+                var plt = parentCmd._transform;
+                var xOffset = -(plt.b + plt.c) * t.ty ;
+                var yOffset = -(plt.b + plt.c) * t.tx;
+                worldT.tx = (t.tx * pt.a + t.ty * pt.c + pt.tx + xOffset);        //tx
+                worldT.ty = (t.tx * pt.b + t.ty * pt.d + pt.ty + yOffset);		  //ty
+            }else{
+                worldT.tx = (t.tx * pt.a + t.ty * pt.c + pt.tx);                  //tx
+                worldT.ty = (t.tx * pt.b + t.ty * pt.d + pt.ty);		          //ty
+            }
         } else {
             worldT.a = t.a;
             worldT.b = t.b;

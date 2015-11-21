@@ -37,11 +37,11 @@ cc.loader.loadBinary = function (url, cb) {
     var xhr = this.getXMLHttpRequest(),
         errInfo = "load " + url + " failed!";
     xhr.open("GET", url, true);
-    if (cc.loader.loadBinary._IEFilter) {
+    if (/msie/i.test(navigator.userAgent) && !/opera/i.test(navigator.userAgent)) {
         // IE-specific logic here
         xhr.setRequestHeader("Accept-Charset", "x-user-defined");
         xhr.onreadystatechange = function () {
-            if (xhr.readyState === 4 && xhr.status === 200) {
+            if (xhr.readyState == 4 && xhr.status == 200) {
                 var fileContents = cc._convertResponseBodyToText(xhr["responseBody"]);
                 cb(null, self._str2Uint8Array(fileContents));
             } else cb(errInfo);
@@ -49,13 +49,11 @@ cc.loader.loadBinary = function (url, cb) {
     } else {
         if (xhr.overrideMimeType) xhr.overrideMimeType("text\/plain; charset=x-user-defined");
         xhr.onload = function () {
-            xhr.readyState === 4 && xhr.status === 200 ? cb(null, self._str2Uint8Array(xhr.responseText)) : cb(errInfo);
+            xhr.readyState == 4 && xhr.status == 200 ? cb(null, self._str2Uint8Array(xhr.responseText)) : cb(errInfo);
         };
     }
     xhr.send(null);
 };
-
-cc.loader.loadBinary._IEFilter = (/msie/i.test(navigator.userAgent) && !/opera/i.test(navigator.userAgent) && window.IEBinaryToArray_ByteStr && window.IEBinaryToArray_ByteStr_Last);
 
 cc.loader._str2Uint8Array = function (strData) {
     if (!strData)
@@ -80,10 +78,10 @@ cc.loader.loadBinarySync = function (url) {
     var errInfo = "load " + url + " failed!";
     req.open('GET', url, false);
     var arrayInfo = null;
-    if (cc.loader.loadBinary._IEFilter) {
+    if (/msie/i.test(navigator.userAgent) && !/opera/i.test(navigator.userAgent)) {
         req.setRequestHeader("Accept-Charset", "x-user-defined");
         req.send(null);
-        if (req.status !== 200) {
+        if (req.status != 200) {
             cc.log(errInfo);
             return null;
         }
@@ -96,7 +94,7 @@ cc.loader.loadBinarySync = function (url) {
         if (req.overrideMimeType)
             req.overrideMimeType('text\/plain; charset=x-user-defined');
         req.send(null);
-        if (req.status !== 200) {
+        if (req.status != 200) {
             cc.log(errInfo);
             return null;
         }
@@ -107,9 +105,9 @@ cc.loader.loadBinarySync = function (url) {
 };
 
 //Compatibility with IE9
-window.Uint8Array = window.Uint8Array || window.Array;
+var Uint8Array = Uint8Array || Array;
 
-if (cc.loader.loadBinary._IEFilter) {
+if (/msie/i.test(navigator.userAgent) && !/opera/i.test(navigator.userAgent)) {
     var IEBinaryToArray_ByteStr_Script =
         "<!-- IEBinaryToArray_ByteStr -->\r\n" +
             //"<script type='text/vbscript'>\r\n" +

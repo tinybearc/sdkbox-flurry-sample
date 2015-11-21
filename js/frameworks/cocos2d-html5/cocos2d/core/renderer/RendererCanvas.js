@@ -32,8 +32,6 @@ cc.rendererCanvas = {
     _cacheToCanvasCmds: {},                              // an array saves the renderer commands need for cache to other canvas
     _cacheInstanceIds: [],
     _currentID: 0,
-    _clearColor: cc.color(),                                  //background color,default BLACK
-    _clearFillStyle: "rgb(0, 0, 0)",
 
     getRenderCmd: function (renderableObject) {
         //TODO Add renderCmd pool here
@@ -125,19 +123,6 @@ cc.rendererCanvas = {
 
     pushDirtyNode: function (node) {
         this._transformNodePool.push(node);
-    },
-
-    clear: function () {
-        var viewport = cc._canvas;
-        var ctx = cc._renderContext.getContext();
-        var wrapper = cc._renderContext;
-        ctx.setTransform(1, 0, 0, 1, 0, 0);
-        //IF transparent or translucence clearRect first to decrease filling rate
-        if(this._clearColor.a !== 255)
-            ctx.clearRect(0, 0, viewport.width, viewport.height);
-        wrapper.setFillStyle(this._clearFillStyle);
-        wrapper.setGlobalAlpha(this._clearColor.a);
-        ctx.fillRect(0, 0, viewport.width, viewport.height);
     },
 
     clearRenderCommands: function () {
@@ -269,9 +254,9 @@ if (cc._renderType === cc._RENDER_TYPE_CANVAS)
             //ugly for armature
             this.restore();
             this.save();
-            this._context.transform(t.a, -t.b, -t.c, t.d, t.tx * scaleX, -(t.ty * scaleY));
+            this._context.transform(t.a, t.c, t.b, t.d, t.tx * scaleX, -(t.ty * scaleY));
         } else {
-            this._context.setTransform(t.a, -t.b, -t.c, t.d, this._offsetX + t.tx * scaleX, this._realOffsetY - (t.ty * scaleY));
+            this._context.setTransform(t.a, t.c, t.b, t.d, this._offsetX + t.tx * scaleX, this._realOffsetY - (t.ty * scaleY));
         }
     };
 

@@ -269,8 +269,8 @@ cc.TMXTiledMap = cc.Node.extend(/** @lends cc.TMXTiledMap# */{
      * map.initWithTMXFile("hello.tmx");
      */
     initWithTMXFile:function (tmxFile) {
-        if(!tmxFile || tmxFile.length === 0)
-            throw new Error("cc.TMXTiledMap.initWithTMXFile(): tmxFile should be non-null or non-empty string.");
+        if(!tmxFile || tmxFile.length == 0)
+            throw "cc.TMXTiledMap.initWithTMXFile(): tmxFile should be non-null or non-empty string.";
 	    this.width = 0;
 	    this.height = 0;
         var mapInfo = new cc.TMXMapInfo(tmxFile);
@@ -349,11 +349,11 @@ cc.TMXTiledMap = cc.Node.extend(/** @lends cc.TMXTiledMap# */{
      */
     getLayer:function (layerName) {
         if(!layerName || layerName.length === 0)
-            throw new Error("cc.TMXTiledMap.getLayer(): layerName should be non-null or non-empty string.");
+            throw "cc.TMXTiledMap.getLayer(): layerName should be non-null or non-empty string.";
         var locChildren = this._children;
         for (var i = 0; i < locChildren.length; i++) {
             var layer = locChildren[i];
-            if (layer && layer.layerName === layerName)
+            if (layer && layer.layerName == layerName)
                 return layer;
         }
         // layer not found
@@ -367,11 +367,11 @@ cc.TMXTiledMap = cc.Node.extend(/** @lends cc.TMXTiledMap# */{
      */
     getObjectGroup:function (groupName) {
         if(!groupName || groupName.length === 0)
-            throw new Error("cc.TMXTiledMap.getObjectGroup(): groupName should be non-null or non-empty string.");
+            throw "cc.TMXTiledMap.getObjectGroup(): groupName should be non-null or non-empty string.";
         if (this.objectGroups) {
             for (var i = 0; i < this.objectGroups.length; i++) {
                 var objectGroup = this.objectGroups[i];
-                if (objectGroup && objectGroup.groupName === groupName) {
+                if (objectGroup && objectGroup.groupName == groupName) {
                     return objectGroup;
                 }
             }
@@ -429,7 +429,7 @@ cc.TMXTiledMap = cc.Node.extend(/** @lends cc.TMXTiledMap# */{
                         for (var x = 0; x < size.width; x++) {
                             var pos = x + size.width * y;
                             var gid = layerInfo._tiles[pos];
-                            if (gid !== 0) {
+                            if (gid != 0) {
                                 // Optimization: quick return
                                 // if the layer is invalid (more than 1 tileset per layer) an cc.assert will be thrown later
                                 if (((gid & cc.TMX_TILE_FLIPPED_MASK)>>>0) >= tileset.firstGid) {

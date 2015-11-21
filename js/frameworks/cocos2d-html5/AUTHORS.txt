@@ -1,20 +1,22 @@
 Cocos2d-html5 authors
 
-(Ordered by join time)
+(ordered by the join in time)
 
 Core Developers:
 
     Shun Lin (Sean Lin)
 
+    Hao Wu (WuHao)
+
+    Dingping Lv (David Lv)
+
     Ricardo Quesada
 
-    Huabin LING (@pandamicro)
+    Huabin LING (pandamicro)
 
-    Sijie Wang (@VisualSJ)
+    Sijie Wang
 
-    Long Jiang (@jianglong0156)
-
-    Menghe Zhang (@ZhangMenghe)
+    Jialong Zhai
 
 Contributors:
 Name                GithubID    Main contribution
@@ -84,9 +86,8 @@ Kang-Hao Lu(Opera/Oupeng) @kennyluck    Optimize John Resig's inheritance patter
 Mark Henderson       @MarkEHenderson    Code review, LabelTTF and Scale9Sprite bug fix
 
 Jing Wang             @06wj         CCScheduler improvements
-                                    Js file loading image add
-                                    cc.RectApplyAffineTransform improvements
-                                    Fixed a bug of cc.Node.setPosition that parameter check is incorrect
+                                   Js file loading image add
+                                   cc.RectApplyAffineTransform improvements
 
 Ze Wang               @WanderWang   Fix crash when BrowserTypes match nothing from navigator.userAgent
                                     LabelTTF improvements
@@ -163,22 +164,18 @@ erykwalder           @erykwalder    Function.prototype.bind bug fix
 
 ZippoLag             @ZippoLag      cc.Application.getCurrentLanguage bug fix
                                     typo fix
-                                    Fixed `cc.TMXObjectGroup#objectNamed` not returning the result bug
 
 Asano                @LaercioAsano  cc.Node bug fix
 
 Bruno Assarisse      @bassarisse    cc.LabelBMFont bug fix
 
-Mykyta Usikov        @musikov       cc.ClippingNode bugs fix
+Mykyta Usikov        @musikov       cc.ClippingNode bug fix
                                     cc.fontLoader bug fix
                                     Inverted ClippingNode with DrawNode as stencil bug fix under canvas render mode
                                     JumpTo bug with wrong _delta position bug fix
                                     cc.ProgressTimer bugs fix
                                     cc.Scale9Sprite bugs fix
                                     cc.RenderTexture bug fix
-                                    cc.ParticleSystem bug fix
-                                    Made CCProgressTimerCanvasRenderCmd to properly show colorized sprites
-                                    cc.ScrollView and cc.TableView: added check for parent visibility in onTouchBegan method
 
 Han XiaoLong         @kpkhxlgy0     cc.ParticleSytem bug fix
 
@@ -190,7 +187,6 @@ Xiaodong Liu         @tianxing113   cc.Spawn.create bug fix
 Park Hyun Chen       @sincntx       Touch anywhere of screen to finish input when using cc.EditBox
                                     ccui.TextBMFont bug fix
                                     cc.game bug fix
-                                    Fixed an issue of cc.ArmatureAnimation's setMovementEventCallFunc
 
 Ninja Lau            @mutoo         A typo bug in UILayout fix
                                     One-loop CCArmatureAnimation can't finish when setSpeedScale is less than 1.0 bug fix
@@ -223,8 +219,6 @@ Robert Rouhani       @Robmaister    cc.TMXMapInfo bug fix
                                     cc.TMXLayer bug fix
 
 Igor Mats            @IgorMats      cc.Scale9Sprite bug fix
-                                    Spine runtime update
-                                    Add getStroke and setStroke method to cc.MotionStreak
 
 Tim                  @duhaibo0404   ccs.csLoader bug fix
 
@@ -238,46 +232,10 @@ Joe Lafiosca         @lafiosca      Added Javascript file loader
 
 galapagosit          @galapagosit   ccs.actionManager bug fix
 
-Dany Ellement        @DEllement     cc.FontDefinition & ccui.RichText improvements
-                                    cc.LayerGradient improvements
-
-IShm                 @IShm          cc.Screen bug fix
-                                    cc.ParticleSystem bug fix
-                                    ccui.PageView bug fix
-                                    Fixed crash when character not found into BMP font
-                                    Fixed restoring of sprite's color issue
-
-Thomas Jablonski     @thomas-jablonski  cc.audioEngine bug fix
-                                        Cocostudio typo fix
-
-WingGao              @WingGao       cc.TMXLayer bug fix
-
-Skliar Ihor          @igogo5yo      Add Bower support
-
-feijing566           @feijing566    cc.Audio bug fix
-
-RackovychV           @RackovychV    Fixed a bug of `cc.Scheduler`'s `pauseAllTargetsWithMinPriority`
-
-giuseppelt           @giuseppelt    Fixed TransitionSlideX callback sequence issue
-
-YShumov              @pixmaster     Fixed issue in music end event
-
-SPACELAN             @spacelan      Fixed `inverse` function bug of `cc.math.Matrix4`
-
-patriciog            @patriciog     Allowed timeline animations with only one frame
-
-Ningxin Hu           @huningxin     SIMD.js optimization for kazmath functions
-
-Zachary Lester       @ZLester       Fix typo in AUTHORS.txt
-
-Juan Carlos          @Ruluk         Fixed a bug where not resetting cc.Audio._ignoreEnded when replaying a sound caused it to stay in a "playing" state
 
 Retired Core Developers:
       Shengxiang Chen (Nero Chan)
       Xingsen Ma
-      Jialong Zhai (@JoshuaAstray)
-      Hao Wu (WuHao)
-      Dingping Lv (David Lv)
 
 Cocos2d-x and cocos2d-html5 can not grow so fast without the active community.
 

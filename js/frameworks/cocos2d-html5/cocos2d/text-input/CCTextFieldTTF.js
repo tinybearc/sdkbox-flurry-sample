@@ -126,6 +126,7 @@ cc.TextFieldTTF = cc.LabelTTF.extend(/** @lends cc.TextFieldTTF# */{
     ctor:function (placeholder, dimensions, alignment, fontName, fontSize) {
         this.colorSpaceHolder = cc.color(127, 127, 127);
         this._colorText = cc.color(255,255,255, 255);
+        cc.imeDispatcher.addDelegate(this);
         cc.LabelTTF.prototype.ctor.call(this);
 
         if(fontSize !== undefined){
@@ -137,16 +138,6 @@ cc.TextFieldTTF = cc.LabelTTF.extend(/** @lends cc.TextFieldTTF# */{
             if(placeholder)
                 this.setPlaceHolder(placeholder);
         }
-    },
-
-    onEnter: function(){
-        cc.LabelTTF.prototype.onEnter.call(this);
-        cc.imeDispatcher.addDelegate(this);
-    },
-
-    onExit: function(){
-        cc.LabelTTF.prototype.onExit.call(this);
-        cc.imeDispatcher.removeDelegate(this);
     },
 
     /**
@@ -236,7 +227,7 @@ cc.TextFieldTTF = cc.LabelTTF.extend(/** @lends cc.TextFieldTTF# */{
                 return this.initWithString(this._placeHolder, arguments[1], arguments[2]);
                 break;
             default:
-                throw new Error("Argument must be non-nil ");
+                throw "Argument must be non-nil ";
                 break;
         }
     },
@@ -365,7 +356,7 @@ cc.TextFieldTTF = cc.LabelTTF.extend(/** @lends cc.TextFieldTTF# */{
      */
     deleteBackward:function () {
         var strLen = this._inputText.length;
-        if (strLen === 0)
+        if (strLen == 0)
             return;
 
         // get the delete byte number
@@ -396,25 +387,6 @@ cc.TextFieldTTF = cc.LabelTTF.extend(/** @lends cc.TextFieldTTF# */{
         cc.imeDispatcher.removeDelegate(this);
     },
 
-    _tipMessage: "please enter your word:",
-    /**
-     * Sets the input tip message to show on mobile browser.  (mobile Web only)
-     * @param {string} tipMessage
-     */
-    setTipMessage: function (tipMessage) {
-        if (tipMessage == null)
-            return;
-        this._tipMessage = tipMessage;
-    },
-
-    /**
-     * Gets the input tip message to show on mobile browser.   (mobile Web only)
-     * @returns {string}
-     */
-    getTipMessage: function () {
-        return this._tipMessage;
-    },
-
     /**
      * Append the text. <br />
      * Input the character.
@@ -441,7 +413,7 @@ cc.TextFieldTTF = cc.LabelTTF.extend(/** @lends cc.TextFieldTTF# */{
             this.string = sText;
         }
 
-        if (pos === -1)
+        if (pos == -1)
             return;
 
         // '\n' has inserted,  let delegate process first

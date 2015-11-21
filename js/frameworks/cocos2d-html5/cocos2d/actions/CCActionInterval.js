@@ -377,7 +377,7 @@ cc.Sequence = cc.ActionInterval.extend(/** @lends cc.Sequence# */{
      */
     initWithTwoActions:function (actionOne, actionTwo) {
         if(!actionOne || !actionTwo)
-            throw new Error("cc.Sequence.initWithTwoActions(): arguments must all be non nil");
+            throw "cc.Sequence.initWithTwoActions(): arguments must all be non nil";
 
         var d = actionOne._duration + actionTwo._duration;
         this.initWithDuration(d);
@@ -501,25 +501,12 @@ cc.sequence = function (/*Multiple Arguments*/tempArray) {
     if ((paramArray.length > 0) && (paramArray[paramArray.length - 1] == null))
         cc.log("parameters should not be ending with null in Javascript");
 
-    var result, current, i, repeat;
-    while(paramArray && paramArray.length > 0){
-        current = Array.prototype.shift.call(paramArray);
-        repeat = current._timesForRepeat || 1;
-        current._repeatMethod = false;
-        current._timesForRepeat = 1;
-
-        i = 0;
-        if(!result){
-            result = current;
-            i = 1;
-        }
-
-        for(i; i<repeat; i++){
-            result = cc.Sequence._actionOneTwo(result, current);
-        }
+    var prev = paramArray[0];
+    for (var i = 1; i < paramArray.length; i++) {
+        if (paramArray[i])
+            prev = cc.Sequence._actionOneTwo(prev, paramArray[i]);
     }
-
-    return result;
+    return prev;
 };
 
 /**
@@ -669,7 +656,7 @@ cc.Repeat = cc.ActionInterval.extend(/** @lends cc.Repeat# */{
      * @return {Boolean}
      */
     isDone:function () {
-        return this._total === this._times;
+        return this._total == this._times;
     },
 
     /**
@@ -688,7 +675,7 @@ cc.Repeat = cc.ActionInterval.extend(/** @lends cc.Repeat# */{
      * @param {cc.FiniteTimeAction} action
      */
     setInnerAction:function (action) {
-        if (this._innerAction !== action) {
+        if (this._innerAction != action) {
             this._innerAction = action;
         }
     },
@@ -758,7 +745,7 @@ cc.RepeatForever = cc.ActionInterval.extend(/** @lends cc.RepeatForever# */{
      */
     initWithAction:function (action) {
         if(!action)
-            throw new Error("cc.RepeatForever.initWithAction(): action must be non null");
+            throw "cc.RepeatForever.initWithAction(): action must be non null";
 
         this._innerAction = action;
         return true;
@@ -826,7 +813,7 @@ cc.RepeatForever = cc.ActionInterval.extend(/** @lends cc.RepeatForever# */{
      * @param {cc.ActionInterval} action
      */
     setInnerAction:function (action) {
-        if (this._innerAction !== action) {
+        if (this._innerAction != action) {
             this._innerAction = action;
         }
     },
@@ -908,7 +895,7 @@ cc.Spawn = cc.ActionInterval.extend(/** @lends cc.Spawn# */{
      */
     initWithTwoActions:function (action1, action2) {
         if(!action1 || !action2)
-            throw new Error("cc.Spawn.initWithTwoActions(): arguments must all be non null");
+            throw "cc.Spawn.initWithTwoActions(): arguments must all be non null" ;
 
         var ret = false;
 
@@ -2654,6 +2641,7 @@ cc.FadeTo = cc.ActionInterval.extend(/** @lends cc.FadeTo# */{
         time = this._computeEaseTime(time);
         var fromOpacity = this._fromOpacity !== undefined ? this._fromOpacity : 255;
         this.target.opacity = fromOpacity + (this._toOpacity - fromOpacity) * time;
+
     },
 
     /**
@@ -2705,9 +2693,7 @@ cc.FadeIn = cc.FadeTo.extend(/** @lends cc.FadeIn# */{
      */
     ctor:function (duration) {
         cc.FadeTo.prototype.ctor.call(this);
-        if (duration == null)
-            duration = 0;
-        this.initWithDuration(duration, 255);
+        duration && this.initWithDuration(duration, 255);
     },
 
     /**
@@ -2781,9 +2767,7 @@ cc.FadeOut = cc.FadeTo.extend(/** @lends cc.FadeOut# */{
      */
     ctor:function (duration) {
         cc.FadeTo.prototype.ctor.call(this);
-        if (duration == null)
-            duration = 0;
-        this.initWithDuration(duration, 0);
+        duration && this.initWithDuration(duration, 0);
     },
 
     /**
@@ -2909,12 +2893,9 @@ cc.TintTo = cc.ActionInterval.extend(/** @lends cc.TintTo# */{
         dt = this._computeEaseTime(dt);
         var locFrom = this._from, locTo = this._to;
         if (locFrom) {
-            this.target.setColor(
-                cc.color(
-                    locFrom.r + (locTo.r - locFrom.r) * dt,
-                    locFrom.g + (locTo.g - locFrom.g) * dt,
-                    locFrom.b + (locTo.b - locFrom.b) * dt)
-            );
+            this.target.color = cc.color(locFrom.r + (locTo.r - locFrom.r) * dt,
+                                        locFrom.g + (locTo.g - locFrom.g) * dt,
+	                                    locFrom.b + (locTo.b - locFrom.b) * dt);
         }
     }
 });
@@ -3168,9 +3149,9 @@ cc.ReverseTime = cc.ActionInterval.extend(/** @lends cc.ReverseTime# */{
      */
     initWithAction:function (action) {
         if(!action)
-            throw new Error("cc.ReverseTime.initWithAction(): action must be non null");
-        if(action === this._other)
-            throw new Error("cc.ReverseTime.initWithAction(): the action was already passed in.");
+            throw "cc.ReverseTime.initWithAction(): action must be non null";
+        if(action == this._other)
+            throw "cc.ReverseTime.initWithAction(): the action was already passed in.";
 
         if (cc.ActionInterval.prototype.initWithDuration.call(this, action._duration)) {
             // Don't leak if action is reused
@@ -3263,8 +3244,7 @@ cc.Animate = cc.ActionInterval.extend(/** @lends cc.Animate# */{
     _nextFrame:0,
     _origFrame:null,
     _executedLoops:0,
-    _splitTimes: null,
-    _currFrameIndex:0,
+    _splitTimes:null,
 
 	/**
      * Constructor function, override it to extend the construction behavior, remember to call "this._super()" in the extended "ctor" function. <br />
@@ -3293,20 +3273,12 @@ cc.Animate = cc.ActionInterval.extend(/** @lends cc.Animate# */{
     },
 
     /**
-     * Gets the index of sprite frame currently displayed.
-     * @return {Number}
-     */
-    getCurrentFrameIndex: function () {
-        return this._currFrameIndex;
-    },
-
-    /**
      * @param {cc.Animation} animation
      * @return {Boolean}
      */
     initWithAnimation:function (animation) {
         if(!animation)
-            throw new Error("cc.Animate.initWithAnimation(): animation must be non-NULL");
+            throw "cc.Animate.initWithAnimation(): animation must be non-NULL";
         var singleDuration = animation.getDuration();
         if (this.initWithDuration(singleDuration * animation.getLoops())) {
             this._nextFrame = 0;
@@ -3382,8 +3354,7 @@ cc.Animate = cc.ActionInterval.extend(/** @lends cc.Animate# */{
         var numberOfFrames = frames.length, locSplitTimes = this._splitTimes;
         for (var i = this._nextFrame; i < numberOfFrames; i++) {
             if (locSplitTimes[i] <= dt) {
-                _currFrameIndex = i;
-                this.target.setSpriteFrame(frames[_currFrameIndex].getSpriteFrame());
+                this.target.setSpriteFrame(frames[i].getSpriteFrame());
                 this._nextFrame = i + 1;
             } else {
                 // Issue 1438. Could be more than one frame per tick, due to low frame rate or frame delta < 1/FPS
@@ -3540,7 +3511,7 @@ cc.TargetedAction = cc.ActionInterval.extend(/** @lends cc.TargetedAction# */{
      * @param {cc.Node} forcedTarget
      */
     setForcedTarget:function (forcedTarget) {
-        if (this._forcedTarget !== forcedTarget)
+        if (this._forcedTarget != forcedTarget)
             this._forcedTarget = forcedTarget;
     }
 });

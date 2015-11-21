@@ -67,51 +67,49 @@ ccs.FRAME_TYPE_MAX = 5;
  * @type {Object}
  */
 ccs.FrameEaseType = {
-    CUSTOM : -1,
+    Custom : -1,
 
-    LINEAR : 0,
+    Linear : 0,
 
-    SINE_EASEIN : 1,
-    SINE_EASEOUT : 2,
-    SINE_EASEINOUT : 3,
+    Sine_EaseIn : 1,
+    Sine_EaseOut : 2,
+    Sine_EaseInOut : 3,
 
-    QUAD_EASEIN : 4,
-    QUAD_EASEOUT : 5,
-    QUAD_EASEINOUT : 6,
+    Quad_EaseIn : 4,
+    Quad_EaseOut : 5,
+    Quad_EaseInOut : 6,
 
-    CUBIC_EASEIN : 7,
-    CUBIC_EASEOUT : 8,
-    CUBIC_EASEINOUT : 9,
+    Cubic_EaseIn : 7,
+    Cubic_EaseOut : 8,
+    Cubic_EaseInOut : 9,
 
-    QUART_EASEIN : 10,
-    QUART_EASEOUT : 11,
-    QUART_EASEINOUT : 12,
+    Quart_EaseIn : 10,
+    Quart_EaseOut : 11,
+    Quart_EaseInOut : 12,
 
-    QUINT_EASEIN : 13,
-    QUINT_EASEOUT : 14,
-    QUINT_EASEINOUT : 15,
+    Quint_EaseIn : 13,
+    Quint_EaseOut : 14,
+    Quint_EaseInOut : 15,
 
-    EXPO_EASEIN : 16,
-    EXPO_EASEOUT : 17,
-    EXPO_EASEINOUT : 18,
+    Expo_EaseIn : 16,
+    Expo_EaseOut : 17,
+    Expo_EaseInOut : 18,
 
-    CIRC_EASEIN : 19,
-    CIRC_EASEOUT : 20,
-    CIRC_EASEINOUT : 21,
+    Circ_EaseIn : 19,
+    Circ_EaseOut : 20,
+    Circ_EaseInOut : 21,
 
-    ELASTIC_EASEIN : 22,
-    ELASTIC_EASEOUT : 23,
-    ELASTIC_EASEINOUT : 24,
+    Elastic_EaesIn : 22,
+    Elastic_EaesOut : 23,
+    Elastic_EaesInOut : 24,
 
-    BACK_EASEIN : 25,
-    BACK_EASEOUT : 26,
-    BACK_EASEINOUT : 27,
+    Back_EaseIn : 25,
+    Back_EaseOut : 26,
+    Back_EaseInOut : 27,
 
-    BOUNCE_EASEIN : 28,
-    BOUNCE_EASEOUT : 29,
-    BOUNCE_EASEINOUT : 30,
-
-    TWEEN_EASING_MAX: 1000
+    Bounce_EaseIn : 28,
+    Bounce_EaseOut : 29,
+    Bounce_EaseInOut : 30
 };
 
 
@@ -137,7 +135,7 @@ ccs.ActionFrame = ccs.Class.extend(/** @lends ccs.ActionFrame# */{
      */
     ctor: function () {
         this.frameType = 0;
-        this.easingType = ccs.FrameEaseType.LINEAR;
+        this.easingType = ccs.FrameEaseType.Linear;
         this.frameIndex = 0;
         this.time = 0;
     },
@@ -161,99 +159,99 @@ ccs.ActionFrame = ccs.Class.extend(/** @lends ccs.ActionFrame# */{
 
         var resultAction;
         switch (this.easingType) {
-            case ccs.FrameEaseType.CUSTOM:
+            case ccs.FrameEaseType.Custom:
                 break;
-            case ccs.FrameEaseType.LINEAR:
+            case ccs.FrameEaseType.Linear:
                 resultAction = action;
                 break;
-            case ccs.FrameEaseType.SINE_EASEIN:
+            case ccs.FrameEaseType.Sine_EaseIn:
                 resultAction = action.easing(cc.easeSineIn());
                 break;
-            case ccs.FrameEaseType.SINE_EASEOUT:
+            case ccs.FrameEaseType.Sine_EaseOut:
                 resultAction = action.easing(cc.easeSineOut());
                 break;
-            case ccs.FrameEaseType.SINE_EASEINOUT:
+            case ccs.FrameEaseType.Sine_EaseInOut:
                 resultAction = action.easing(cc.easeSineInOut());
                 break;
-            case ccs.FrameEaseType.QUAD_EASEIN:
+            case ccs.FrameEaseType.Quad_EaseIn:
                 resultAction = action.easing(cc.easeQuadraticActionIn());
                 break;
-            case ccs.FrameEaseType.QUAD_EASEOUT:
+            case ccs.FrameEaseType.Quad_EaseOut:
                 resultAction = action.easing(cc.easeQuadraticActionOut());
                 break;
-            case ccs.FrameEaseType.QUAD_EASEINOUT:
+            case ccs.FrameEaseType.Quad_EaseInOut:
                 resultAction = action.easing(cc.easeQuadraticActionInOut());
                 break;
-            case ccs.FrameEaseType.CUBIC_EASEIN:
+            case ccs.FrameEaseType.Cubic_EaseIn:
                 resultAction = action.easing(cc.easeCubicActionIn());
                 break;
-            case ccs.FrameEaseType.CUBIC_EASEOUT:
+            case ccs.FrameEaseType.Cubic_EaseOut:
                 resultAction = action.easing(cc.easeCubicActionOut());
                 break;
-            case ccs.FrameEaseType.CUBIC_EASEINOUT:
+            case ccs.FrameEaseType.Cubic_EaseInOut:
                 resultAction = action.easing(cc.easeCubicActionInOut());
                 break;
-            case ccs.FrameEaseType.QUART_EASEIN:
+            case ccs.FrameEaseType.Quart_EaseIn:
                 resultAction = action.easing(cc.easeQuarticActionIn());
                 break;
-            case ccs.FrameEaseType.QUART_EASEOUT:
+            case ccs.FrameEaseType.Quart_EaseOut:
                 resultAction = action.easing(cc.easeQuarticActionOut());
                 break;
-            case ccs.FrameEaseType.QUART_EASEINOUT:
+            case ccs.FrameEaseType.Quart_EaseInOut:
                 resultAction = action.easing(cc.easeQuarticActionInOut());
                 break;
-            case ccs.FrameEaseType.QUINT_EASEIN:
+            case ccs.FrameEaseType.Quint_EaseIn:
                 resultAction = action.easing(cc.easeQuinticActionIn());
                 break;
-            case ccs.FrameEaseType.QUINT_EASEOUT:
+            case ccs.FrameEaseType.Quint_EaseOut:
                 resultAction = action.easing(cc.easeQuinticActionOut());
                 break;
-            case ccs.FrameEaseType.QUINT_EASEINOUT:
+            case ccs.FrameEaseType.Quint_EaseInOut:
                 resultAction = action.easing(cc.easeQuinticActionInOut());
                 break;
-            case ccs.FrameEaseType.EXPO_EASEIN:
+            case ccs.FrameEaseType.Expo_EaseIn:
                 resultAction = action.easing(cc.easeExponentialIn());
                 break;
-            case ccs.FrameEaseType.EXPO_EASEOUT:
+            case ccs.FrameEaseType.Expo_EaseOut:
                 resultAction = action.easing(cc.easeExponentialOut());
                 break;
-            case ccs.FrameEaseType.EXPO_EASEINOUT:
+            case ccs.FrameEaseType.Expo_EaseInOut:
                 resultAction = action.easing(cc.easeExponentialInOut());
                 break;
-            case ccs.FrameEaseType.CIRC_EASEIN:
+            case ccs.FrameEaseType.Circ_EaseIn:
                 resultAction = action.easing(cc.easeCircleActionIn());
                 break;
-            case ccs.FrameEaseType.CIRC_EASEOUT:
+            case ccs.FrameEaseType.Circ_EaseOut:
                 resultAction = action.easing(cc.easeCircleActionOut());
                 break;
-            case ccs.FrameEaseType.CIRC_EASEINOUT:
+            case ccs.FrameEaseType.Circ_EaseInOut:
                 resultAction = action.easing(cc.easeCircleActionInOut());
                 break;
-            case ccs.FrameEaseType.ELASTIC_EASEIN:
+            case ccs.FrameEaseType.Elastic_EaesIn:
                 resultAction = action.easing(cc.easeElasticIn());
                 break;
-            case ccs.FrameEaseType.ELASTIC_EASEOUT:
+            case ccs.FrameEaseType.Elastic_EaesOut:
                 resultAction = action.easing(cc.easeElasticOut());
                 break;
-            case ccs.FrameEaseType.ELASTIC_EASEINOUT:
+            case ccs.FrameEaseType.Elastic_EaesInOut:
                 resultAction = action.easing(cc.easeElasticInOut());
                 break;
-            case ccs.FrameEaseType.BACK_EASEIN:
+            case ccs.FrameEaseType.Back_EaseIn:
                 resultAction = action.easing(cc.easeBackIn());
                 break;
-            case ccs.FrameEaseType.BACK_EASEOUT:
+            case ccs.FrameEaseType.Back_EaseOut:
                 resultAction = action.easing(cc.easeBackOut());
                 break;
-            case ccs.FrameEaseType.BACK_EASEINOUT:
+            case ccs.FrameEaseType.Back_EaseInOut:
                 resultAction = action.easing(cc.easeBackInOut());
                 break;
-            case ccs.FrameEaseType.BOUNCE_EASEIN:
+            case ccs.FrameEaseType.Bounce_EaseIn:
                 resultAction = action.easing(cc.easeBounceIn());
                 break;
-            case ccs.FrameEaseType.BOUNCE_EASEOUT:
+            case ccs.FrameEaseType.Bounce_EaseOut:
                 resultAction = action.easing(cc.easeBounceOut());
                 break;
-            case ccs.FrameEaseType.BOUNCE_EASEINOUT:
+            case ccs.FrameEaseType.Bounce_EaseInOut:
                 resultAction = action.easing(cc.easeBounceInOut());
                 break;
         }

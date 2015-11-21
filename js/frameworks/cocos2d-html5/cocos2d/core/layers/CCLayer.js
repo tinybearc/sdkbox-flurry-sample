@@ -83,7 +83,7 @@ cc.Layer = cc.Node.extend(/** @lends cc.Layer# */{
      * @see cc.Layer#bake and cc.Layer#unbake
      */
     isBaked: function(){
-        return this._renderCmd._isBaked;
+        return this._isBaked;
     },
 
     addChild: function(child, localZOrder, tag){
@@ -191,7 +191,7 @@ cc.LayerColor = cc.Layer.extend(/** @lends cc.LayerColor# */{
      */
     ctor: function(color, width, height){
         cc.Layer.prototype.ctor.call(this);
-        this._blendFunc = new cc.BlendFunc(cc.SRC_ALPHA, cc.ONE_MINUS_SRC_ALPHA);
+        this._blendFunc = new cc.BlendFunc(cc.BLEND_SRC, cc.BLEND_DST);
         cc.LayerColor.prototype.init.call(this, color, width, height);
     },
 
@@ -313,7 +313,7 @@ cc.LayerColor.create = function (color, width, height) {
  * @property {Number}   startOpacity            - Start opacity of the color gradient
  * @property {Number}   endOpacity              - End opacity of the color gradient
  * @property {Number}   vector                  - Direction vector of the color gradient
- * @property {Number}   compressedInterpolation  - Indicate whether or not the interpolation will be compressed
+ * @property {Number}   compresseInterpolation  - Indicate whether or not the interpolation will be compressed
  */
 cc.LayerGradient = cc.LayerColor.extend(/** @lends cc.LayerGradient# */{
     _endColor: null,
@@ -322,39 +322,21 @@ cc.LayerGradient = cc.LayerColor.extend(/** @lends cc.LayerGradient# */{
     _alongVector: null,
     _compressedInterpolation: false,
     _className: "LayerGradient",
-    _colorStops: [],
 
     /**
      * Constructor of cc.LayerGradient
      * @param {cc.Color} start
      * @param {cc.Color} end
      * @param {cc.Point} [v=cc.p(0, -1)]
-     * @param {Array|Null} stops
-     *
-     * @example Using ColorStops argument:
-     * //startColor & endColor are for default and backward compatibility
-     * var layerGradient = new cc.LayerGradient(cc.color.RED, new cc.Color(255,0,0,0), cc.p(0, -1),
-     *                                          [{p:0, color: cc.color.RED},
-     *                                           {p:.5, color: new cc.Color(0,0,0,0)},
-     *                                           {p:1, color: cc.color.RED}]);
-     * //where p = A value between 0.0 and 1.0 that represents the position between start and end in a gradient
-     *
      */
-    ctor: function (start, end, v, stops) {
-        cc.LayerColor.prototype.ctor.call(this);
-        this._endColor = cc.color(0, 0, 0, 255);
-        this._alongVector = cc.p(0, -1);
-        this._startOpacity = 255;
-        this._endOpacity = 255;
-
-        if(stops && stops instanceof Array){
-            this._colorStops = stops;
-            stops.splice(0, 0, {p:0, color: start || cc.color.BLACK});
-            stops.push({p:1, color: end || cc.color.BLACK});
-        } else
-            this._colorStops = [{p:0, color: start || cc.color.BLACK}, {p:1, color: end || cc.color.BLACK}];
-
-        cc.LayerGradient.prototype.init.call(this, start, end, v, stops);
+    ctor: function (start, end, v) {
+        var _t = this;
+        cc.LayerColor.prototype.ctor.call(_t);
+        _t._endColor = cc.color(0, 0, 0, 255);
+        _t._alongVector = cc.p(0, -1);
+        _t._startOpacity = 255;
+        _t._endOpacity = 255;
+        cc.LayerGradient.prototype.init.call(_t, start, end, v);
     },
 
     /**
@@ -362,10 +344,9 @@ cc.LayerGradient = cc.LayerColor.extend(/** @lends cc.LayerGradient# */{
      * @param {cc.Color} start starting color
      * @param {cc.Color} end
      * @param {cc.Point|Null} v
-     * @param {Array|Null} stops
      * @return {Boolean}
      */
-    init: function (start, end, v, stops) {
+    init: function (start, end, v) {
         start = start || cc.color(0, 0, 0, 255);
         end = end || cc.color(0, 0, 0, 255);
         v = v || cc.p(0, -1);
@@ -412,7 +393,7 @@ cc.LayerGradient = cc.LayerColor.extend(/** @lends cc.LayerGradient# */{
      * @return {cc.Color}
      */
     getStartColor: function () {
-        return cc.color(this._realColor);
+        return this._realColor;
     },
 
     /**
@@ -425,14 +406,6 @@ cc.LayerGradient = cc.LayerColor.extend(/** @lends cc.LayerGradient# */{
      */
     setStartColor: function (color) {
         this.color = color;
-        //update the color stops
-        var stops = this._colorStops;
-        if(stops && stops.length > 0){
-            var selColor = stops[0].color;
-            selColor.r = color.r;
-            selColor.g = color.g;
-            selColor.b = color.b;
-        }
     },
 
     /**
@@ -444,18 +417,7 @@ cc.LayerGradient = cc.LayerColor.extend(/** @lends cc.LayerGradient# */{
      * //set the ending gradient to red
      */
     setEndColor: function (color) {
-        var locColor = this._endColor;
-        locColor.r = color.r;
-        locColor.g = color.g;
-        locColor.b = color.b;
-        //update the color stops
-        var stops = this._colorStops;
-        if(stops && stops.length > 0){
-            var selColor = stops[stops.length -1].color;
-            selColor.r = color.r;
-            selColor.g = color.g;
-            selColor.b = color.b;
-        }
+        this._endColor = color;
         this._renderCmd.setDirtyFlag(cc.Node._dirtyFlags.colorDirty);
     },
 
@@ -464,7 +426,7 @@ cc.LayerGradient = cc.LayerColor.extend(/** @lends cc.LayerGradient# */{
      * @return {cc.Color}
      */
     getEndColor: function () {
-        return cc.color(this._endColor);
+        return this._endColor;
     },
 
     /**
@@ -473,10 +435,6 @@ cc.LayerGradient = cc.LayerColor.extend(/** @lends cc.LayerGradient# */{
      */
     setStartOpacity: function (o) {
         this._startOpacity = o;
-        //update the color stops
-        var stops = this._colorStops;
-        if(stops && stops.length > 0)
-            stops[0].color.a = o;
         this._renderCmd.setDirtyFlag(cc.Node._dirtyFlags.opacityDirty);
     },
 
@@ -494,9 +452,6 @@ cc.LayerGradient = cc.LayerColor.extend(/** @lends cc.LayerGradient# */{
      */
     setEndOpacity: function (o) {
         this._endOpacity = o;
-        var stops = this._colorStops;
-        if(stops && stops.length > 0)
-            stops[stops.length -1].color.a = o;
         this._renderCmd.setDirtyFlag(cc.Node._dirtyFlags.opacityDirty);
     },
 
@@ -543,36 +498,6 @@ cc.LayerGradient = cc.LayerColor.extend(/** @lends cc.LayerGradient# */{
         this._renderCmd.setDirtyFlag(cc.Node._dirtyFlags.gradientDirty);
     },
 
-    /**
-     * Return an array of Object representing a colorStop for the gradient, if no stops was specified
-     * start & endColor will be provided as default values
-     * @example
-     * [{p: 0, color: cc.color.RED},{p: 1, color: cc.color.RED},...]
-     * @returns {Array}
-     */
-    getColorStops: function(){
-        return this._colorStops;
-    },
-    /**
-     * Set the colorStops to create the gradient using multiple point & color
-     *
-     * @param colorStops
-     *
-     * @example
-     * //startColor & endColor are for default and backward compatibility
-     * var layerGradient = new cc.LayerGradient(cc.color.RED, new cc.Color(255,0,0,0), cc.p(0, -1));
-     * layerGradient.setColorStops([{p:0, color: cc.color.RED},
-     *                              {p:.5, color: new cc.Color(0,0,0,0)},
-     *                              {p:1, color: cc.color.RED}]);
-     * //where p = A value between 0.0 and 1.0 that represents the position between start and end in a gradient
-     *
-     */
-    setColorStops: function(colorStops){
-        this._colorStops = colorStops;
-        //todo need update  the start color and end color
-        this._renderCmd.setDirtyFlag(cc.Node._dirtyFlags.colorDirty|cc.Node._dirtyFlags.opacityDirty|cc.Node._dirtyFlags.gradientDirty);
-    },
-
     _createRenderCmd: function(){
         if (cc._renderType === cc._RENDER_TYPE_CANVAS)
             return new cc.LayerGradient.CanvasRenderCmd(this);
@@ -588,11 +513,10 @@ cc.LayerGradient = cc.LayerColor.extend(/** @lends cc.LayerGradient# */{
  * @param {cc.Color} start starting color
  * @param {cc.Color} end ending color
  * @param {cc.Point|Null} v
- * @param {Array|NULL} stops
  * @return {cc.LayerGradient}
  */
-cc.LayerGradient.create = function (start, end, v, stops) {
-    return new cc.LayerGradient(start, end, v, stops);
+cc.LayerGradient.create = function (start, end, v) {
+    return new cc.LayerGradient(start, end, v);
 };
 //LayerGradient - Getter Setter
 (function(){
@@ -613,9 +537,6 @@ cc.LayerGradient.create = function (start, end, v, stops) {
     /** @expose */
     proto.vector;
     cc.defineGetterSetter(proto, "vector", proto.getVector, proto.setVector);
-    /** @expose */
-    proto.colorStops;
-    cc.defineGetterSetter(proto, "colorStops", proto.getColorStops, proto.setColorStops);
 })();
 
 /**

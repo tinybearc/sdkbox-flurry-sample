@@ -144,7 +144,7 @@ ccui.Button = ccui.Widget.extend(/** @lends ccui.Button# */{
      */
     setScale9Enabled: function (able) {
         //todo create Scale9Sprite
-        if (this._scale9Enabled === able)
+        if (this._scale9Enabled == able)
             return;
 
         this._brightStyle = ccui.Widget.BRIGHT_STYLE_NONE;
@@ -185,10 +185,6 @@ ccui.Button = ccui.Widget.extend(/** @lends ccui.Button# */{
         this.setCapInsetsPressedRenderer(this._capInsetsPressed);
         this.setCapInsetsDisabledRenderer(this._capInsetsDisabled);
         this.setBright(this._bright);
-
-        this._normalTextureAdaptDirty = true;
-        this._pressedTextureAdaptDirty = true;
-        this._disabledTextureAdaptDirty = true;
     },
 
     /**
@@ -258,7 +254,7 @@ ccui.Button = ccui.Widget.extend(/** @lends ccui.Button# */{
         var normalRenderer = this._buttonNormalRenderer;
         if(!normalRenderer._textureLoaded){
             normalRenderer.addEventListener("load", function(){
-                self.loadTextureNormal(self._normalFileName, self._normalTexType);
+                self.loadTextureNormal(normal, texType);
             });
         }
         switch (this._normalTexType){
@@ -274,8 +270,6 @@ ccui.Button = ccui.Widget.extend(/** @lends ccui.Button# */{
                 break;
         }
 
-        this._normalTextureLoaded = normalRenderer._textureLoaded;
-
         this._normalTextureSize = this._buttonNormalRenderer.getContentSize();
         this._updateChildrenDisplayedRGBA();
         if (this._unifySize){
@@ -286,6 +280,7 @@ ccui.Button = ccui.Widget.extend(/** @lends ccui.Button# */{
         }else
             this._updateContentSizeWithTextureSize(this._normalTextureSize);
 
+        this._normalTextureLoaded = true;
         this._normalTextureAdaptDirty = true;
         this._findLayout();
     },
@@ -296,7 +291,7 @@ ccui.Button = ccui.Widget.extend(/** @lends ccui.Button# */{
      * @param {ccui.Widget.LOCAL_TEXTURE|ccui.Widget.PLIST_TEXTURE} texType
      */
     loadTexturePressed: function (selected, texType) {
-        if (!selected)
+        if (!selected || (this._clickedFileName == selected && this._pressedTexType == texType))
             return;
         texType = texType || ccui.Widget.LOCAL_TEXTURE;
         this._clickedFileName = selected;
@@ -306,7 +301,7 @@ ccui.Button = ccui.Widget.extend(/** @lends ccui.Button# */{
         var clickedRenderer = this._buttonClickedRenderer;
         if(!clickedRenderer._textureLoaded){
             clickedRenderer.addEventListener("load", function(){
-                self.loadTexturePressed(self._clickedFileName, self._pressedTexType);
+                self.loadTexturePressed(selected, texType);
             });
         }
 
@@ -351,7 +346,7 @@ ccui.Button = ccui.Widget.extend(/** @lends ccui.Button# */{
         var disabledRenderer = this._buttonDisableRenderer;
         if(!disabledRenderer._textureLoaded){
             disabledRenderer.addEventListener("load", function() {
-                self.loadTextureDisabled(self._disabledFileName, self._disabledTexType);
+                self.loadTextureDisabled(disabled, texType);
             });
         }
 
@@ -438,11 +433,11 @@ ccui.Button = ccui.Widget.extend(/** @lends ccui.Button# */{
         var x = capInsets.x, y = capInsets.y;
         var width = capInsets.width, height = capInsets.height;
 
-        if (this._pressedTextureSize.width < width) {
+        if (this._normalTextureSize.width < width) {
             x = 0;
             width = 0;
         }
-        if (this._pressedTextureSize.height < height) {
+        if (this._normalTextureSize.height < height) {
             y = 0;
             height = 0;
         }
@@ -475,11 +470,11 @@ ccui.Button = ccui.Widget.extend(/** @lends ccui.Button# */{
         var x = capInsets.x, y = capInsets.y;
         var width = capInsets.width, height = capInsets.height;
 
-        if (this._disabledTextureSize.width < width) {
+        if (this._normalTextureSize.width < width) {
             x = 0;
             width = 0;
         }
-        if (this._disabledTextureSize.height < height) {
+        if (this._normalTextureSize.height < height) {
             y = 0;
             height = 0;
         }
@@ -511,31 +506,33 @@ ccui.Button = ccui.Widget.extend(/** @lends ccui.Button# */{
             if (this.pressedActionEnabled){
                 this._buttonNormalRenderer.stopAllActions();
                 this._buttonClickedRenderer.stopAllActions();
-                //var zoomAction = cc.scaleTo(ccui.Button.ZOOM_ACTION_TIME_STEP, this._normalTextureScaleXInSize, this._normalTextureScaleYInSize);
-                //fixme: the zoomAction will run in the next frame which will cause the _buttonNormalRenderer to a wrong scale
-                //this._buttonNormalRenderer.runAction(zoomAction);
-                this._buttonNormalRenderer.setScale(this._normalTextureScaleXInSize, this._normalTextureScaleYInSize);
+                var zoomAction = cc.scaleTo(ccui.Button.ZOOM_ACTION_TIME_STEP, this._normalTextureScaleXInSize, this._normalTextureScaleYInSize);
+                this._buttonNormalRenderer.runAction(zoomAction);
                 this._buttonClickedRenderer.setScale(this._pressedTextureScaleXInSize, this._pressedTextureScaleYInSize);
 
                 this._titleRenderer.stopAllActions();
                 if (this._unifySize){
                     var zoomTitleAction = cc.scaleTo(ccui.Button.ZOOM_ACTION_TIME_STEP, 1, 1);
                     this._titleRenderer.runAction(zoomTitleAction);
-                }else{
-                    this._titleRenderer.setScaleX(1);
-                    this._titleRenderer.setScaleY(1);
-                }
+                }else
+                    this._titleRenderer.runAction(zoomAction.clone());
             }
         } else {
             this._buttonNormalRenderer.stopAllActions();
             this._buttonNormalRenderer.setScale(this._normalTextureScaleXInSize, this._normalTextureScaleYInSize);
 
             this._titleRenderer.stopAllActions();
+
             if (this._scale9Enabled)
                 this._buttonNormalRenderer.setColor(cc.color.WHITE);
 
-            this._titleRenderer.setScaleX(1);
-            this._titleRenderer.setScaleY(1);
+            if(this._unifySize){
+                this._titleRenderer.setScaleX(1);
+                this._titleRenderer.setScaleY(1);
+            }else{
+                this._titleRenderer.setScaleX(this._normalTextureScaleXInSize);
+                this._titleRenderer.setScaleY(this._normalTextureScaleYInSize);
+            }
         }
     },
 
@@ -557,7 +554,11 @@ ccui.Button = ccui.Widget.extend(/** @lends ccui.Button# */{
                 locNormalRenderer.setScale(this._pressedTextureScaleXInSize + this._zoomScale, this._pressedTextureScaleYInSize + this._zoomScale);
 
                 this._titleRenderer.stopAllActions();
-                this._titleRenderer.runAction(cc.scaleTo(ccui.Button.ZOOM_ACTION_TIME_STEP, 1 + this._zoomScale, 1 + this._zoomScale));
+                if (this._unifySize){
+                    var zoomTitleAction = cc.scaleTo(ccui.Button.ZOOM_ACTION_TIME_STEP, 1 + this._zoomScale, 1 + this._zoomScale);
+                    this._titleRenderer.runAction(zoomTitleAction);
+                } else
+                    this._titleRenderer.runAction(zoomAction.clone());
             }
         } else {
             locNormalRenderer.setVisible(true);
@@ -566,9 +567,17 @@ ccui.Button = ccui.Widget.extend(/** @lends ccui.Button# */{
             locNormalRenderer.stopAllActions();
             locNormalRenderer.setScale(this._normalTextureScaleXInSize + this._zoomScale, this._normalTextureScaleYInSize + this._zoomScale);
 
+            if (this._scale9Enabled)
+                locNormalRenderer.setState(ccui.Scale9Sprite.state.GRAY);
+
             this._titleRenderer.stopAllActions();
-            this._titleRenderer.setScaleX(1 + this._zoomScale);
-            this._titleRenderer.setScaleY(1 + this._zoomScale);
+            if (this._unifySize){
+                this._titleRenderer.setScaleX(1 + this._zoomScale);
+                this._titleRenderer.setScaleY(1 + this._zoomScale);
+            }else{
+                this._titleRenderer.setScaleX(this._normalTextureScaleXInSize + this._zoomScale);
+                this._titleRenderer.setScaleY(this._normalTextureScaleYInSize + this._zoomScale);
+            }
         }
     },
 
@@ -751,7 +760,7 @@ ccui.Button = ccui.Widget.extend(/** @lends ccui.Button# */{
      * @param {String} text
      */
     setTitleText: function (text) {
-        if(text === this.getTitleText())
+        if(text == this.getTitleText())
             return;
         this._titleRenderer.setString(text);
         if (this._ignoreSize){
@@ -820,15 +829,6 @@ ccui.Button = ccui.Widget.extend(/** @lends ccui.Button# */{
      */
     getZoomScale: function(){
         return this._zoomScale;
-    },
-
-    /**
-     * Returns the normalize of texture size
-     * @since v3.3
-     * @returns {cc.Size}
-     */
-    getNormalTextureSize: function(){
-        return this._normalTextureSize;
     },
 
     /**
@@ -901,11 +901,11 @@ ccui.Button = ccui.Widget.extend(/** @lends ccui.Button# */{
 
     _getNormalSize: function(){
         var titleSize;
-        if (this._titleRenderer !== null)
+        if (this._titleRenderer != null)
             titleSize = this._titleRenderer.getContentSize();
 
         var imageSize;
-        if (this._buttonNormalRenderer !== null)
+        if (this._buttonNormalRenderer != null)
             imageSize = this._buttonNormalRenderer.getContentSize();
         var width = titleSize.width > imageSize.width ? titleSize.width : imageSize.width;
         var height = titleSize.height > imageSize.height ? titleSize.height : imageSize.height;

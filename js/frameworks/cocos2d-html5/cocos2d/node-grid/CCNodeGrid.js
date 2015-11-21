@@ -36,14 +36,7 @@
 cc.NodeGrid = cc.Node.extend({
     grid: null,
     _target: null,
-    _gridRect:null,
 
-    ctor: function (rect) {
-        cc.Node.prototype.ctor.call(this);
-        if(rect == undefined) rect = cc.rect();
-        this._gridRect = rect;
-        cc.GridAction.prototype._gridNodeTarget = this;
-    },
     /**
      * Gets the grid object.
      * @returns {cc.GridBase}
@@ -58,21 +51,6 @@ cc.NodeGrid = cc.Node.extend({
      */
     setGrid: function (grid) {
         this.grid = grid;
-    },
-
-    /**
-     * @brief Set the effect grid rect.
-     * @param {cc.rect} rect.
-     */
-    setGridRect: function (rect) {
-        this._gridRect = rect;
-    },
-    /**
-     * @brief Get the effect grid rect.
-     * @return {cc.rect} rect.
-    */
-    getGridRect: function () {
-        return this._gridRect;
     },
 
     /**
@@ -102,13 +80,12 @@ cc.NodeGrid = cc.Node.extend({
         t4x4Mat[14] = this._vertexZ;
 
         //optimize performance for Javascript
-        topMat4.multiply(t4x4) ; // = cc.kmGLMultMatrix(this._transform4x4);
+        cc.kmMat4Multiply(topMat4, topMat4, t4x4); // = cc.kmGLMultMatrix(this._transform4x4);
 
         // XXX: Expensive calls. Camera should be integrated into the cached affine matrix
-        if (this._camera !== null && !(this.grid && this.grid.isActive())) {
-            var app = this._renderCmd._anchorPointInPoints,
-                apx = app.x, apy = app.y,
-                translate = (apx !== 0.0 || apy !== 0.0);
+        if (this._camera != null && !(this.grid && this.grid.isActive())) {
+            var apx = this._anchorPointInPoints.x, apy = this._anchorPointInPoints.y;
+            var translate = (apx !== 0.0 || apy !== 0.0);
             if (translate) {
                 if(!cc.SPRITEBATCHNODE_RENDER_SUBPIXEL) {
                     apx = 0 | apx;
