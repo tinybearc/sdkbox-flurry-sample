@@ -89,11 +89,12 @@ ccs.Armature = ccs.Node.extend(/** @lends ccs.Armature# */{
         this._boneDic = {};
         this._topBoneList.length = 0;
 
-        //this._name = name || "";
+
+        this._name = name || "";
         var armatureDataManager = ccs.armatureDataManager;
 
         var animationData;
-        if (name !== "") {
+        if (name != "") {
             //animationData
             animationData = armatureDataManager.getAnimationData(name);
             cc.assert(animationData, "AnimationData not exist!");
@@ -130,15 +131,15 @@ ccs.Armature = ccs.Node.extend(/** @lends ccs.Armature# */{
             this.update(0);
             this.updateOffsetPoint();
         } else {
-            name = "new_armature";
+            this._name = "new_armature";
             this.armatureData = new ccs.ArmatureData();
-            this.armatureData.name = name;
+            this.armatureData.name = this._name;
 
             animationData = new ccs.AnimationData();
-            animationData.name = name;
+            animationData.name = this._name;
 
-            armatureDataManager.addArmatureData(name, this.armatureData);
-            armatureDataManager.addAnimationData(name, animationData);
+            armatureDataManager.addArmatureData(this._name, this.armatureData);
+            armatureDataManager.addAnimationData(this._name, animationData);
 
             this.animation.setAnimationData(animationData);
         }
@@ -148,14 +149,6 @@ ccs.Armature = ccs.Node.extend(/** @lends ccs.Armature# */{
         this.setCascadeOpacityEnabled(true);
         this.setCascadeColorEnabled(true);
         return true;
-    },
-
-    addChild: function (child, localZOrder, tag) {
-        if(child instanceof ccui.Widget){
-            cc.log("Armature doesn't support to add Widget as its child, it will be fix soon.");
-            return;
-        }
-        cc.Node.prototype.addChild.call(this, child, localZOrder, tag);
     },
 
     /**
@@ -278,7 +271,7 @@ ccs.Armature = ccs.Node.extend(/** @lends ccs.Armature# */{
         var locOffsetPoint = this._offsetPoint;
         locOffsetPoint.x = -rect.x;
         locOffsetPoint.y = -rect.y;
-        if (rect.width !== 0 && rect.height !== 0)
+        if (rect.width != 0 && rect.height != 0)
             this.setAnchorPoint(locOffsetPoint.x / rect.width, locOffsetPoint.y / rect.height);
     },
 
@@ -356,7 +349,7 @@ ccs.Armature = ccs.Node.extend(/** @lends ccs.Armature# */{
             var bone = locChildren[i];
             if (bone) {
                 var r = bone.getDisplayManager().getBoundingBox();
-                if (r.x === 0 && r.y === 0 && r.width === 0 && r.height === 0)
+                if (r.x == 0 && r.y == 0 && r.width == 0 && r.height == 0)
                     continue;
 
                 if(first) {
@@ -441,7 +434,7 @@ ccs.Armature = ccs.Node.extend(/** @lends ccs.Armature# */{
     },
 
     setBody: function (body) {
-        if (this._body === body)
+        if (this._body == body)
             return;
 
         this._body = body;

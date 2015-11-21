@@ -23,6 +23,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
+
 /**
  * The text control of Cocos UI.
  * @class
@@ -84,11 +85,9 @@ ccui.Text = ccui.Widget.extend(/** @lends ccui.Text# */{
     init: function (textContent, fontName, fontSize) {
         if (ccui.Widget.prototype.init.call(this)) {
             if(arguments.length > 0){
+                this.setString(textContent);
                 this.setFontName(fontName);
                 this.setFontSize(fontSize);
-                this.setString(textContent);
-            }else{
-                this.setFontName(this._fontName);
             }
             return true;
         }
@@ -115,7 +114,7 @@ ccui.Text = ccui.Widget.extend(/** @lends ccui.Text# */{
      * @param {String} text
      */
     setString: function (text) {
-        if(text === this._labelRenderer.getString())
+        if(text == this._labelRenderer.getString())
             return;
         this._labelRenderer.setString(text);
         this._updateContentSizeWithTextureSize(this._labelRenderer.getContentSize());
@@ -326,17 +325,6 @@ ccui.Text = ccui.Widget.extend(/** @lends ccui.Text# */{
         return this._labelRenderer;
     },
 
-    //@since v3.3
-    getAutoRenderSize: function(){
-        var virtualSize = this._labelRenderer.getContentSize();
-        if (!this._ignoreSize) {
-            this._labelRenderer.setDimensions(0, 0);
-            virtualSize = this._labelRenderer.getContentSize();
-            this._labelRenderer.setDimensions(this._contentSize.width, this._contentSize.height);
-        }
-        return virtualSize;
-    },
-
     _labelScaleChangedWithSize: function () {
         var locContentSize = this._contentSize;
         if (this._ignoreSize) {
@@ -392,7 +380,7 @@ ccui.Text = ccui.Widget.extend(/** @lends ccui.Text# */{
      * @param glowColor
      */
     enableGlow: function(glowColor){
-        if (this._type === ccui.Text.Type.TTF)
+        if (this._type == ccui.Text.Type.TTF)
             this._labelRenderer.enableGlow(glowColor);
     },
 

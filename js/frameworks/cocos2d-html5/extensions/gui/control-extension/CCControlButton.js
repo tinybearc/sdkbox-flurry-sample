@@ -168,9 +168,9 @@ cc.ControlButton = cc.Control.extend(/** @lends cc.ControlButton# */{
 
     initWithLabelAndBackgroundSprite: function (label, backgroundSprite) {
         if (!label)
-            throw new Error("cc.ControlButton.initWithLabelAndBackgroundSprite(): label should be non-null");
+            throw "cc.ControlButton.initWithLabelAndBackgroundSprite(): label should be non-null";
         if (!backgroundSprite)
-            throw new Error("cc.ControlButton.initWithLabelAndBackgroundSprite(): backgroundSprite should be non-null");
+            throw "cc.ControlButton.initWithLabelAndBackgroundSprite(): backgroundSprite should be non-null";
         if (cc.Control.prototype.init.call(this, true)) {
             this._parentInited = true;
 
@@ -461,7 +461,7 @@ cc.ControlButton = cc.Control.extend(/** @lends cc.ControlButton# */{
         this._titleDispatchTable[state] = title || "";
 
         // If the current state if equal to the given state we update the layout
-        if (this.getState() === state)
+        if (this.getState() == state)
             this.needsLayout();
     },
 
@@ -492,7 +492,7 @@ cc.ControlButton = cc.Control.extend(/** @lends cc.ControlButton# */{
         this._titleColorDispatchTable[state] = color;
 
         // If the current state if equal to the given state we update the layout
-        if (this.getState() === state)
+        if (this.getState() == state)
             this.needsLayout();
     },
 
@@ -531,7 +531,7 @@ cc.ControlButton = cc.Control.extend(/** @lends cc.ControlButton# */{
         this.addChild(titleLabel, 1);
 
         // If the current state if equal to the given state we update the layout
-        if (this.getState() === state)
+        if (this.getState() == state)
             this.needsLayout();
     },
 

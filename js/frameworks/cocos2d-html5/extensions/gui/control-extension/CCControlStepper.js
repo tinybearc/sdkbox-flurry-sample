@@ -95,9 +95,9 @@ cc.ControlStepper = cc.Control.extend(/** @lends cc.ControlStepper# */{
 
     initWithMinusSpriteAndPlusSprite:function (minusSprite, plusSprite) {
         if(!minusSprite)
-            throw new Error("cc.ControlStepper.initWithMinusSpriteAndPlusSprite(): Minus sprite should be non-null.");
+            throw "cc.ControlStepper.initWithMinusSpriteAndPlusSprite(): Minus sprite should be non-null.";
         if(!plusSprite)
-            throw new Error("cc.ControlStepper.initWithMinusSpriteAndPlusSprite(): Plus sprite should be non-null.");
+            throw "cc.ControlStepper.initWithMinusSpriteAndPlusSprite(): Plus sprite should be non-null.";
 
         if (this.init()) {
             // Set the default values
@@ -158,7 +158,7 @@ cc.ControlStepper = cc.Control.extend(/** @lends cc.ControlStepper# */{
 
     setMinimumValue:function (minimumValue) {
         if (minimumValue >= this._maximumValue)
-            throw new Error("cc.ControlStepper.setMinimumValue(): minimumValue should be numerically less than maximumValue.");
+            throw "cc.ControlStepper.setMinimumValue(): minimumValue should be numerically less than maximumValue.";
 
         this._minimumValue = minimumValue;
         this.setValue(this._value);
@@ -169,7 +169,7 @@ cc.ControlStepper = cc.Control.extend(/** @lends cc.ControlStepper# */{
 
     setMaximumValue:function (maximumValue) {
         if (maximumValue <= this._minimumValue)
-            throw new Error("cc.ControlStepper.setMaximumValue(): maximumValue should be numerically less than maximumValue.");
+            throw "cc.ControlStepper.setMaximumValue(): maximumValue should be numerically less than maximumValue.";
 
         this._maximumValue = maximumValue;
         this.setValue(this._value);
@@ -188,7 +188,7 @@ cc.ControlStepper = cc.Control.extend(/** @lends cc.ControlStepper# */{
 
     setStepValue:function (stepValue) {
         if (stepValue <= 0)
-            throw new Error("cc.ControlStepper.setMaximumValue(): stepValue should be numerically greater than 0.");
+            throw "cc.ControlStepper.setMaximumValue(): stepValue should be numerically greater than 0.";
         this._stepValue = stepValue;
     },
 
@@ -210,8 +210,8 @@ cc.ControlStepper = cc.Control.extend(/** @lends cc.ControlStepper# */{
         this._value = value;
 
         if (!this._wraps) {
-            this._minusLabel.setColor((value === this._minimumValue) ? cc.CONTROL_STEPPER_LABELCOLOR_DISABLED : cc.CONTROL_STEPPER_LABELCOLOR_ENABLED);
-            this._plusLabel.setColor((value === this._maximumValue) ? cc.CONTROL_STEPPER_LABELCOLOR_DISABLED : cc.CONTROL_STEPPER_LABELCOLOR_ENABLED);
+            this._minusLabel.setColor((value == this._minimumValue) ? cc.CONTROL_STEPPER_LABELCOLOR_DISABLED : cc.CONTROL_STEPPER_LABELCOLOR_ENABLED);
+            this._plusLabel.setColor((value == this._maximumValue) ? cc.CONTROL_STEPPER_LABELCOLOR_DISABLED : cc.CONTROL_STEPPER_LABELCOLOR_ENABLED);
         }
 
         if (send) {
@@ -232,12 +232,12 @@ cc.ControlStepper = cc.Control.extend(/** @lends cc.ControlStepper# */{
     update:function (dt) {
         this._autorepeatCount++;
 
-        if ((this._autorepeatCount < cc.AUTOREPEAT_INCREASETIME_INCREMENT) && (this._autorepeatCount % 3) !== 0)
+        if ((this._autorepeatCount < cc.AUTOREPEAT_INCREASETIME_INCREMENT) && (this._autorepeatCount % 3) != 0)
             return;
 
-        if (this._touchedPart === cc.CONTROL_STEPPER_PARTMINUS) {
+        if (this._touchedPart == cc.CONTROL_STEPPER_PARTMINUS) {
             this.setValueWithSendingEvent(this._value - this._stepValue, this._continuous);
-        } else if (this._touchedPart === cc.CONTROL_STEPPER_PARTPLUS) {
+        } else if (this._touchedPart == cc.CONTROL_STEPPER_PARTPLUS) {
             this.setValueWithSendingEvent(this._value + this._stepValue, this._continuous);
         }
     },

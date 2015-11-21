@@ -155,21 +155,21 @@ cc.ParticleBatchNode = cc.Node.extend(/** @lends cc.ParticleBatchNode# */{
      */
     addChild:function (child, zOrder, tag) {
         if(!child)
-            throw new Error("cc.ParticleBatchNode.addChild() : child should be non-null");
+            throw "cc.ParticleBatchNode.addChild() : child should be non-null";
         if(!(child instanceof cc.ParticleSystem))
-            throw new Error("cc.ParticleBatchNode.addChild() : only supports cc.ParticleSystem as children");
+            throw "cc.ParticleBatchNode.addChild() : only supports cc.ParticleSystem as children";
         zOrder = (zOrder == null) ? child.zIndex : zOrder;
         tag = (tag == null) ? child.tag : tag;
 
-        if(child.getTexture() !== this.textureAtlas.texture)
-            throw new Error("cc.ParticleSystem.addChild() : the child is not using the same texture id");
+        if(child.getTexture() != this.textureAtlas.texture)
+            throw "cc.ParticleSystem.addChild() : the child is not using the same texture id";
 
         // If this is the 1st children, then copy blending function
         var childBlendFunc = child.getBlendFunc();
         if (this._children.length === 0)
             this.setBlendFunc(childBlendFunc);
         else{
-            if((childBlendFunc.src !== this._blendFunc.src) || (childBlendFunc.dst !== this._blendFunc.dst)){
+            if((childBlendFunc.src != this._blendFunc.src) || (childBlendFunc.dst != this._blendFunc.dst)){
                 cc.log("cc.ParticleSystem.addChild() : Can't add a ParticleSystem that uses a different blending function");
                 return;
             }
@@ -181,7 +181,7 @@ cc.ParticleBatchNode = cc.Node.extend(/** @lends cc.ParticleBatchNode# */{
         //get new atlasIndex
         var atlasIndex = 0;
 
-        if (pos !== 0) {
+        if (pos != 0) {
             var p = this._children[pos - 1];
             atlasIndex = p.getAtlasIndex() + p.getTotalParticles();
         } else
@@ -210,7 +210,7 @@ cc.ParticleBatchNode = cc.Node.extend(/** @lends cc.ParticleBatchNode# */{
         }
 
         // make room for quads, not necessary for last child
-        if (pSystem.getAtlasIndex() + totalParticles !== totalQuads)
+        if (pSystem.getAtlasIndex() + totalParticles != totalQuads)
             locTextureAtlas.moveQuadsFromIndex(index, index + totalParticles);
 
         // increase totalParticles here for new particles, update method of particlesystem will fill the quads
@@ -228,8 +228,8 @@ cc.ParticleBatchNode = cc.Node.extend(/** @lends cc.ParticleBatchNode# */{
             return;
 
         if(!(child instanceof cc.ParticleSystem))
-            throw new Error("cc.ParticleBatchNode.removeChild(): only supports cc.ParticleSystem as children");
-        if(this._children.indexOf(child) === -1){
+            throw "cc.ParticleBatchNode.removeChild(): only supports cc.ParticleSystem as children";
+        if(this._children.indexOf(child) == -1){
             cc.log("cc.ParticleBatchNode.removeChild(): doesn't contain the sprite. Can't remove it");
             return;
         }
@@ -256,22 +256,22 @@ cc.ParticleBatchNode = cc.Node.extend(/** @lends cc.ParticleBatchNode# */{
      */
     reorderChild:function (child, zOrder) {
         if(!child)
-            throw new Error("cc.ParticleBatchNode.reorderChild(): child should be non-null");
+            throw "cc.ParticleBatchNode.reorderChild(): child should be non-null";
         if(!(child instanceof cc.ParticleSystem))
-            throw new Error("cc.ParticleBatchNode.reorderChild(): only supports cc.QuadParticleSystems as children");
+            throw "cc.ParticleBatchNode.reorderChild(): only supports cc.QuadParticleSystems as children";
         if(this._children.indexOf(child) === -1){
             cc.log("cc.ParticleBatchNode.reorderChild(): Child doesn't belong to batch");
             return;
         }
 
-        if (zOrder === child.zIndex)
+        if (zOrder == child.zIndex)
             return;
 
         // no reordering if only 1 child
         if (this._children.length > 1) {
             var getIndexes = this._getCurrentIndex(child, zOrder);
 
-            if (getIndexes.oldIndex !== getIndexes.newIndex) {
+            if (getIndexes.oldIndex != getIndexes.newIndex) {
                 // reorder m_pChildren.array
                 this._children.splice(getIndexes.oldIndex, 1)
                 this._children.splice(getIndexes.newIndex, 0, child);
@@ -287,7 +287,7 @@ cc.ParticleBatchNode = cc.Node.extend(/** @lends cc.ParticleBatchNode# */{
                 var locChildren = this._children;
                 for (var i = 0; i < locChildren.length; i++) {
                     var pNode = locChildren[i];
-                    if (pNode === child) {
+                    if (pNode == child) {
                         newAtlasIndex = child.getAtlasIndex();
                         break;
                     }
@@ -350,7 +350,7 @@ cc.ParticleBatchNode = cc.Node.extend(/** @lends cc.ParticleBatchNode# */{
 
         // If the new texture has No premultiplied alpha, AND the blendFunc hasn't been changed, then update it
         var locBlendFunc = this._blendFunc;
-        if (texture && !texture.hasPremultipliedAlpha() && ( locBlendFunc.src === cc.BLEND_SRC && locBlendFunc.dst === cc.BLEND_DST )) {
+        if (texture && !texture.hasPremultipliedAlpha() && ( locBlendFunc.src == cc.BLEND_SRC && locBlendFunc.dst == cc.BLEND_DST )) {
             locBlendFunc.src = cc.SRC_ALPHA;
             locBlendFunc.dst = cc.ONE_MINUS_SRC_ALPHA;
         }
@@ -429,7 +429,7 @@ cc.ParticleBatchNode = cc.Node.extend(/** @lends cc.ParticleBatchNode# */{
                     break;
             }
             // current index
-            if (child === pNode) {
+            if (child == pNode) {
                 oldIndex = i;
                 foundCurrentIdx = true;
                 if (!foundNewIdx)
@@ -459,7 +459,7 @@ cc.ParticleBatchNode = cc.Node.extend(/** @lends cc.ParticleBatchNode# */{
     //
     _addChildHelper:function (child, z, aTag) {
         if(!child)
-            throw new Error("cc.ParticleBatchNode._addChildHelper(): child should be non-null");
+            throw "cc.ParticleBatchNode._addChildHelper(): child should be non-null";
         if(child.parent){
             cc.log("cc.ParticleBatchNode._addChildHelper(): child already added. It can't be added again");
             return null;

@@ -241,8 +241,8 @@ cc.MenuItemLabel = cc.MenuItem.extend(/** @lends cc.MenuItemLabel# */{
             this._disabledColor = cc.color(126, 126, 126);
             this.setLabel(label);
 
-            this.setCascadeColorEnabled(true);
-            this.setCascadeOpacityEnabled(true);
+            this.cascadeColor = true;
+            this.cascadeOpacity = true;
         }
     },
 
@@ -281,7 +281,6 @@ cc.MenuItemLabel = cc.MenuItem.extend(/** @lends cc.MenuItemLabel# */{
             label.anchorY = 0;
             this.width = label.width;
             this.height = label.height;
-            label.setCascadeColorEnabled(true);
         }
 
         if (this._label) {
@@ -296,15 +295,48 @@ cc.MenuItemLabel = cc.MenuItem.extend(/** @lends cc.MenuItemLabel# */{
      * @param {Boolean} enabled
      */
     setEnabled: function (enabled) {
-        if (this._enabled !== enabled) {
+        if (this._enabled != enabled) {
+            var locLabel = this._label;
             if (!enabled) {
-                this._colorBackup = this.color;
-                this.setColor(this._disabledColor);
+                this._colorBackup = locLabel.color;
+                locLabel.color = this._disabledColor;
             } else {
-                this.setColor(this._colorBackup);
+                locLabel.color = this._colorBackup;
             }
         }
         cc.MenuItem.prototype.setEnabled.call(this, enabled);
+    },
+
+    /**
+     * set opacity for cc.MenuItemLabel
+     * @param {Number} opacity from 0-255
+     */
+    setOpacity: function (opacity) {
+        this._label.opacity = opacity;
+    },
+
+    /**
+     * return the opacity of cc.MenuItemLabel
+     * @return {Number}
+     */
+    getOpacity: function () {
+        return this._label.opacity;
+    },
+
+    /**
+     * set the opacity for cc.MenuItemLabel
+     * @param {cc.Color} color
+     */
+    setColor: function (color) {
+        this._label.color = color;
+    },
+
+    /**
+     * return the color of cc.MenuItemLabel
+     * @return {cc.Color}
+     */
+    getColor: function () {
+        return this._label.color;
     },
 
     /**
@@ -321,8 +353,8 @@ cc.MenuItemLabel = cc.MenuItem.extend(/** @lends cc.MenuItemLabel# */{
         this._disabledColor = cc.color(126, 126, 126);
         this.setLabel(label);
 
-        this.setCascadeColorEnabled(true);
-        this.setCascadeOpacityEnabled(true);
+        this.cascadeColor = true;
+        this.cascadeOpacity = true;
 
         return true;
     },
@@ -460,8 +492,8 @@ cc.MenuItemAtlasFont = cc.MenuItemLabel.extend(/** @lends cc.MenuItemAtlasFont# 
      * @return {Boolean}
      */
     initWithString: function (value, charMapFile, itemWidth, itemHeight, startCharMap, callback, target) {
-        if (!value || value.length === 0)
-            throw new Error("cc.MenuItemAtlasFont.initWithString(): value should be non-null and its length should be greater than 0");
+        if (!value || value.length == 0)
+            throw "cc.MenuItemAtlasFont.initWithString(): value should be non-null and its length should be greater than 0";
 
         var label = new cc.LabelAtlas();
         label.initWithString(value, charMapFile, itemWidth, itemHeight, startCharMap);
@@ -534,8 +566,8 @@ cc.MenuItemFont = cc.MenuItemLabel.extend(/** @lends cc.MenuItemFont# */{
      * @return {Boolean}
      */
     initWithString: function (value, callback, target) {
-        if (!value || value.length === 0)
-            throw new Error("Value should be non-null and its length should be greater than 0");
+        if (!value || value.length == 0)
+            throw "Value should be non-null and its length should be greater than 0";
 
         this._fontName = cc._globalFontName;
         this._fontSize = cc._globalFontSize;
@@ -693,8 +725,8 @@ cc.MenuItemSprite = cc.MenuItem.extend(/** @lends cc.MenuItemSprite# */{
         this._disabledImage = null;
 
         if (selectedSprite !== undefined) {
-            //normalSprite = normalSprite;
-            //selectedSprite = selectedSprite;
+            normalSprite = normalSprite;
+            selectedSprite = selectedSprite;
             var disabledImage, target, callback;
             //when you send 4 arguments, five is undefined
             if (five !== undefined) {
@@ -707,9 +739,9 @@ cc.MenuItemSprite = cc.MenuItem.extend(/** @lends cc.MenuItemSprite# */{
             } else if (four !== undefined && cc.isFunction(three)) {
                 target = four;
                 callback = three;
-                disabledImage = null;
+                disabledImage = new cc.Sprite(selectedSprite.getTexture(), selectedSprite.getTextureRect());
             } else if (three === undefined) {
-                disabledImage = null;
+                disabledImage = new cc.Sprite(selectedSprite.getTexture(), selectedSprite.getTextureRect());
             }
             this.initWithNormalSprite(normalSprite, selectedSprite, disabledImage, callback, target);
         }
@@ -728,7 +760,7 @@ cc.MenuItemSprite = cc.MenuItem.extend(/** @lends cc.MenuItemSprite# */{
      * @param {cc.Sprite} normalImage
      */
     setNormalImage: function (normalImage) {
-        if (this._normalImage === normalImage) {
+        if (this._normalImage == normalImage) {
             return;
         }
         if (normalImage) {
@@ -766,7 +798,7 @@ cc.MenuItemSprite = cc.MenuItem.extend(/** @lends cc.MenuItemSprite# */{
      * @param {cc.Sprite} selectedImage
      */
     setSelectedImage: function (selectedImage) {
-        if (this._selectedImage === selectedImage)
+        if (this._selectedImage == selectedImage)
             return;
 
         if (selectedImage) {
@@ -796,7 +828,7 @@ cc.MenuItemSprite = cc.MenuItem.extend(/** @lends cc.MenuItemSprite# */{
      * @param {cc.Sprite} disabledImage
      */
     setDisabledImage: function (disabledImage) {
-        if (this._disabledImage === disabledImage)
+        if (this._disabledImage == disabledImage)
             return;
 
         if (disabledImage) {
@@ -835,14 +867,58 @@ cc.MenuItemSprite = cc.MenuItem.extend(/** @lends cc.MenuItemSprite# */{
                 locNormalImage.addEventListener("load", function (sender) {
                     this.width = sender.width;
                     this.height = sender.height;
-                    this.setCascadeColorEnabled(true);
-                    this.setCascadeOpacityEnabled(true);
+                    this.cascadeColor = true;
+                    this.cascadeOpacity = true;
                 }, this);
             }
         }
-        this.setCascadeColorEnabled(true);
-        this.setCascadeOpacityEnabled(true);
+        this.cascadeColor = true;
+        this.cascadeOpacity = true;
         return true;
+    },
+
+    /**
+     * set the color for cc.MenuItemSprite
+     * @param {cc.Color} color
+     */
+    setColor: function (color) {
+        this._normalImage.color = color;
+
+        if (this._selectedImage)
+            this._selectedImage.color = color;
+
+        if (this._disabledImage)
+            this._disabledImage.color = color;
+    },
+
+    /**
+     * return the color of cc.MenuItemSprite
+     * @return {cc.Color}
+     */
+    getColor: function () {
+        return this._normalImage.color;
+    },
+
+    /**
+     * set the opacity for cc.MenuItemSprite
+     * @param {Number} opacity 0 - 255
+     */
+    setOpacity: function (opacity) {
+        this._normalImage.opacity = opacity;
+
+        if (this._selectedImage)
+            this._selectedImage.opacity = opacity;
+
+        if (this._disabledImage)
+            this._disabledImage.opacity = opacity;
+    },
+
+    /**
+     * return the opacity of cc.MenuItemSprite
+     * @return {Number} opacity from 0 - 255
+     */
+    getOpacity: function () {
+        return this._normalImage.opacity;
     },
 
     /**
@@ -883,7 +959,7 @@ cc.MenuItemSprite = cc.MenuItem.extend(/** @lends cc.MenuItemSprite# */{
      * @param {Boolean} bEnabled
      */
     setEnabled: function (bEnabled) {
-        if (this._enabled !== bEnabled) {
+        if (this._enabled != bEnabled) {
             cc.MenuItem.prototype.setEnabled.call(this, bEnabled);
             this._updateImagesVisibility();
         }
@@ -1175,7 +1251,7 @@ cc.MenuItemToggle = cc.MenuItem.extend(/** @lends cc.MenuItemToggle# */{
      * @param {Number} SelectedIndex
      */
     setSelectedIndex: function (SelectedIndex) {
-        if (SelectedIndex !== this._selectedIndex) {
+        if (SelectedIndex != this._selectedIndex) {
             this._selectedIndex = SelectedIndex;
             var currItem = this.getChildByTag(cc.CURRENT_ITEM);
             if (currItem)
@@ -1235,8 +1311,8 @@ cc.MenuItemToggle = cc.MenuItem.extend(/** @lends cc.MenuItemToggle# */{
         this._selectedIndex = cc.UINT_MAX;
         this.setSelectedIndex(0);
 
-        this.setCascadeColorEnabled(true);
-        this.setCascadeOpacityEnabled(true);
+        this.cascadeColor = true;
+        this.cascadeOpacity = true;
 
         return true;
     },
@@ -1282,7 +1358,7 @@ cc.MenuItemToggle = cc.MenuItem.extend(/** @lends cc.MenuItemToggle# */{
      * @param {Boolean} enabled
      */
     setEnabled: function (enabled) {
-        if (this._enabled !== enabled) {
+        if (this._enabled != enabled) {
             cc.MenuItem.prototype.setEnabled.call(this, enabled);
             var locItems = this.subItems;
             if (locItems && locItems.length > 0) {

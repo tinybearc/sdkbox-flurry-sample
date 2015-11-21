@@ -42,8 +42,6 @@
 
     proto.clearStencil = function (stencilValue) { };
 
-    proto.setVirtualViewport = function(rtBegin, fullRect, fullViewport) {};
-
     proto.updateClearColor = function(clearColor){
         this._clearColorStr = "rgba(" + (0 | clearColor.r) + "," + (0 | clearColor.g) + "," + (0 | clearColor.b) + "," + clearColor.a / 255 + ")";
     };
@@ -73,7 +71,7 @@
         r = r || 0;
         g = g || 0;
         b = b || 0;
-        a = isNaN(a) ? 255 : a;
+        a = isNaN(a) ? 1 : a;
 
         var context = this._cacheContext.getContext();
         var locCanvas = this._cacheCanvas;

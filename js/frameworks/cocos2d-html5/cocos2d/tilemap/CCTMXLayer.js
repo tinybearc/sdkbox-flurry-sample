@@ -323,11 +323,11 @@ cc.TMXLayer = cc.SpriteBatchNode.extend(/** @lends cc.TMXLayer# */{
      */
     getTileAt: function (pos, y) {
         if(!pos)
-            throw new Error("cc.TMXLayer.getTileAt(): pos should be non-null");
+            throw "cc.TMXLayer.getTileAt(): pos should be non-null";
         if(y !== undefined)
             pos = cc.p(pos, y);
         if(pos.x >= this._layerSize.width || pos.y >= this._layerSize.height || pos.x < 0 || pos.y < 0)
-            throw new Error("cc.TMXLayer.getTileAt(): invalid position");
+            throw "cc.TMXLayer.getTileAt(): invalid position";
         if(!this.tiles || !this._atlasIndexArray){
             cc.log("cc.TMXLayer.getTileAt(): TMXLayer: the tiles map has been released");
             return null;
@@ -370,12 +370,12 @@ cc.TMXLayer = cc.SpriteBatchNode.extend(/** @lends cc.TMXLayer# */{
      * @return {Number}
      */
     getTileGIDAt:function (pos, y) {
-        if(pos == null)
-            throw new Error("cc.TMXLayer.getTileGIDAt(): pos should be non-null");
+        if(!pos)
+            throw "cc.TMXLayer.getTileGIDAt(): pos should be non-null";
         if(y !== undefined)
             pos = cc.p(pos, y);
         if(pos.x >= this._layerSize.width || pos.y >= this._layerSize.height || pos.x < 0 || pos.y < 0)
-            throw new Error("cc.TMXLayer.getTileGIDAt(): invalid position");
+            throw "cc.TMXLayer.getTileGIDAt(): invalid position";
         if(!this.tiles || !this._atlasIndexArray){
             cc.log("cc.TMXLayer.getTileGIDAt(): TMXLayer: the tiles map has been released");
             return null;
@@ -398,11 +398,11 @@ cc.TMXLayer = cc.SpriteBatchNode.extend(/** @lends cc.TMXLayer# */{
      */
     getTileFlagsAt:function (pos, y) {
         if(!pos)
-            throw new Error("cc.TMXLayer.getTileFlagsAt(): pos should be non-null");
+            throw "cc.TMXLayer.getTileFlagsAt(): pos should be non-null";
         if(y !== undefined)
             pos = cc.p(pos, y);
         if(pos.x >= this._layerSize.width || pos.y >= this._layerSize.height || pos.x < 0 || pos.y < 0)
-            throw new Error("cc.TMXLayer.getTileFlagsAt(): invalid position");
+            throw "cc.TMXLayer.getTileFlagsAt(): invalid position";
         if(!this.tiles || !this._atlasIndexArray){
             cc.log("cc.TMXLayer.getTileFlagsAt(): TMXLayer: the tiles map has been released");
             return null;
@@ -428,7 +428,7 @@ cc.TMXLayer = cc.SpriteBatchNode.extend(/** @lends cc.TMXLayer# */{
      */
     setTileGID: function(gid, posOrX, flagsOrY, flags) {
         if(!posOrX)
-            throw new Error("cc.TMXLayer.setTileGID(): pos should be non-null");
+            throw "cc.TMXLayer.setTileGID(): pos should be non-null";
         var pos;
         if (flags !== undefined) {
             pos = cc.p(posOrX, flagsOrY);
@@ -437,7 +437,7 @@ cc.TMXLayer = cc.SpriteBatchNode.extend(/** @lends cc.TMXLayer# */{
             flags = flagsOrY;
         }
         if(pos.x >= this._layerSize.width || pos.y >= this._layerSize.height || pos.x < 0 || pos.y < 0)
-            throw new Error("cc.TMXLayer.setTileGID(): invalid position");
+            throw "cc.TMXLayer.setTileGID(): invalid position";
         if(!this.tiles || !this._atlasIndexArray){
             cc.log("cc.TMXLayer.setTileGID(): TMXLayer: the tiles map has been released");
             return;
@@ -452,7 +452,7 @@ cc.TMXLayer = cc.SpriteBatchNode.extend(/** @lends cc.TMXLayer# */{
         var currentFlags = this.getTileFlagsAt(pos);
         var currentGID = this.getTileGIDAt(pos);
 
-        if (currentGID !== gid || currentFlags !== flags) {
+        if (currentGID != gid || currentFlags != flags) {
             var gidAndFlags = (gid | flags) >>> 0;
             // setting gid=0 is equal to remove the tile
             if (gid === 0)
@@ -484,11 +484,11 @@ cc.TMXLayer = cc.SpriteBatchNode.extend(/** @lends cc.TMXLayer# */{
      */
     removeTileAt:function (pos, y) {
         if(!pos)
-            throw new Error("cc.TMXLayer.removeTileAt(): pos should be non-null");
+            throw "cc.TMXLayer.removeTileAt(): pos should be non-null";
         if(y !== undefined)
             pos = cc.p(pos, y);
         if(pos.x >= this._layerSize.width || pos.y >= this._layerSize.height || pos.x < 0 || pos.y < 0)
-            throw new Error("cc.TMXLayer.removeTileAt(): invalid position");
+            throw "cc.TMXLayer.removeTileAt(): invalid position";
         if(!this.tiles || !this._atlasIndexArray){
             cc.log("cc.TMXLayer.removeTileAt(): TMXLayer: the tiles map has been released");
             return;
@@ -662,7 +662,7 @@ cc.TMXLayer = cc.SpriteBatchNode.extend(/** @lends cc.TMXLayer# */{
     },
 
     _positionForHexAt:function (pos) {
-        var diffY = (pos.x % 2 === 1) ? (-this._mapTileSize.height / 2) : 0;
+        var diffY = (pos.x % 2 == 1) ? (-this._mapTileSize.height / 2) : 0;
         return cc.p(pos.x * this._mapTileSize.width * 3 / 4,
             (this._layerSize.height - pos.y - 1) * this._mapTileSize.height + diffY);
     },
@@ -762,7 +762,7 @@ cc.TMXLayer = cc.SpriteBatchNode.extend(/** @lends cc.TMXLayer# */{
         // if cc_vertex=automatic, then tiles will be rendered using vertexz
         var vertexz = this.getProperty("cc_vertexz");
         if (vertexz) {
-            if (vertexz === "automatic") {
+            if (vertexz == "automatic") {
                 this._useAutomaticVertexZ = true;
                 var alphaFuncVal = this.getProperty("cc_alpha_func");
                 var alphaFuncValue = 0;
@@ -809,11 +809,11 @@ cc.TMXLayer = cc.SpriteBatchNode.extend(/** @lends cc.TMXLayer# */{
 
             var flag = (gid & (cc.TMX_TILE_HORIZONTAL_FLAG | cc.TMX_TILE_VERTICAL_FLAG) >>> 0) >>> 0;
             // handle the 4 diagonally flipped states.
-            if (flag === cc.TMX_TILE_HORIZONTAL_FLAG)
+            if (flag == cc.TMX_TILE_HORIZONTAL_FLAG)
                 sprite.rotation = 90;
-            else if (flag === cc.TMX_TILE_VERTICAL_FLAG)
+            else if (flag == cc.TMX_TILE_VERTICAL_FLAG)
                 sprite.rotation = 270;
-            else if (flag === (cc.TMX_TILE_VERTICAL_FLAG | cc.TMX_TILE_HORIZONTAL_FLAG) >>> 0) {
+            else if (flag == (cc.TMX_TILE_VERTICAL_FLAG | cc.TMX_TILE_HORIZONTAL_FLAG) >>> 0) {
                 sprite.rotation = 90;
 	            sprite.setFlippedX(true);
             } else {
@@ -861,7 +861,7 @@ cc.TMXLayer = cc.SpriteBatchNode.extend(/** @lends cc.TMXLayer# */{
             var locAtlasIndexArray = this._atlasIndexArray;
             for (var i = 0, len = locAtlasIndexArray.length; i < len; i++) {
                 item = locAtlasIndexArray[i];
-                if (item === z)
+                if (item == z)
                     break;
             }
         }

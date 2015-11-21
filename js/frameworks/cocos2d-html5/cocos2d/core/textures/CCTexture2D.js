@@ -110,6 +110,7 @@ if (cc._renderType === cc._RENDER_TYPE_CANVAS) {
      * @extends cc.Class
      *
      * @property {WebGLTexture}     name            - <@readonly> WebGLTexture Object
+     * @property {Number}           defaultPixelFormat - The default pixel format
      * @property {Number}           pixelFormat     - <@readonly> Pixel format of the texture
      * @property {Number}           pixelsWidth     - <@readonly> Width in pixels
      * @property {Number}           pixelsHeight    - <@readonly> Height in pixels
@@ -407,7 +408,7 @@ if (cc._renderType === cc._RENDER_TYPE_CANVAS) {
         _backupElement: null,
         _isGray: false,
         _switchToGray: function(toGray){
-            if(!this._textureLoaded || this._isGray === toGray)
+            if(!this._textureLoaded || this._isGray == toGray)
                 return;
             this._isGray = toGray;
             if(this._isGray){
@@ -416,7 +417,7 @@ if (cc._renderType === cc._RENDER_TYPE_CANVAS) {
                      this._grayElementObj = cc.Texture2D._generateGrayTexture(this._htmlElementObj);
                 this._htmlElementObj = this._grayElementObj;
             } else {
-                if(this._backupElement !== null)
+                if(this._backupElement != null)
                     this._htmlElementObj = this._backupElement;
             }
         }

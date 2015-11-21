@@ -61,7 +61,7 @@ ccui._TextFieldRenderer = cc.TextFieldTTF.extend({
     },
 
     onTextFieldInsertText: function (sender, text, len) {
-        if (len === 1 && text === "\n")
+        if (len == 1 && text == "\n")
             return false;
 
         this.setInsertText(true);
@@ -81,7 +81,7 @@ ccui._TextFieldRenderer = cc.TextFieldTTF.extend({
     insertText: function (text, len) {
         var input_text = text;
 
-        if (text !== "\n"){
+        if (text != "\n"){
             if (this._maxLengthEnabled){
                 var text_count = this.getString().length;
                 if (text_count >= this._maxLength){
@@ -252,12 +252,12 @@ ccui.TextField = ccui.Widget.extend(/** @lends ccui.TextField# */{
      */
     ctor: function (placeholder, fontName, fontSize) {
         ccui.Widget.prototype.ctor.call(this);
+        if (placeholder)
+            this.setPlaceHolder(placeholder);
         if (fontName)
             this.setFontName(fontName);
         if (fontSize)
             this.setFontSize(fontSize);
-        if (placeholder)
-            this.setPlaceHolder(placeholder);
     },
 
     /**
@@ -565,13 +565,13 @@ ccui.TextField = ccui.Widget.extend(/** @lends ccui.TextField# */{
     },
 
     update: function (dt) {
-        if (this.getDetachWithIME()) {
-            this._detachWithIMEEvent();
-            this.setDetachWithIME(false);
-        }
         if (this.getAttachWithIME()) {
             this._attachWithIMEEvent();
             this.setAttachWithIME(false);
+        }
+        if (this.getDetachWithIME()) {
+            this._detachWithIMEEvent();
+            this.setDetachWithIME(false);
         }
         if (this.getInsertText()) {
             this._textFieldRendererAdaptDirty = true;
@@ -734,17 +734,6 @@ ccui.TextField = ccui.Widget.extend(/** @lends ccui.TextField# */{
         if (!this._ignoreSize)
             this._textFieldRenderer.setDimensions(this._contentSize);
         this._textFieldRenderer.setPosition(this._contentSize.width / 2, this._contentSize.height / 2);
-    },
-
-    //@since v3.3
-    getAutoRenderSize: function(){
-        var virtualSize = this._textFieldRenderer.getContentSize();
-        if (!this._ignoreSize) {
-            this._textFieldRenderer.setDimensions(0, 0);
-            virtualSize = this._textFieldRenderer.getContentSize();
-            this._textFieldRenderer.setDimensions(this._contentSize.width, this._contentSize.height);
-        }
-        return virtualSize;
     },
 
     /**

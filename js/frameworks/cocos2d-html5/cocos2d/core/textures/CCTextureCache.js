@@ -121,7 +121,7 @@ cc.textureCache = /** @lends cc.textureCache# */{
      */
     getKeyByTexture: function (texture) {
         for (var key in this._textures) {
-            if (this._textures[key] === texture) {
+            if (this._textures[key] == texture) {
                 return key;
             }
         }
@@ -197,7 +197,7 @@ cc.textureCache = /** @lends cc.textureCache# */{
 
         var locTextures = this._textures;
         for (var selKey in locTextures) {
-            if (locTextures[selKey] === texture) {
+            if (locTextures[selKey] == texture) {
                 locTextures[selKey].releaseTexture();
                 delete(locTextures[selKey]);
             }
@@ -247,6 +247,7 @@ cc.textureCache = /** @lends cc.textureCache# */{
      * @return {cc.Texture2D}
      */
     addUIImage: function (image, key) {
+
         cc.assert(image, cc._LogInfos.textureCache_addUIImage_2);
 
         if (key) {
@@ -257,7 +258,7 @@ cc.textureCache = /** @lends cc.textureCache# */{
         // prevents overloading the autorelease pool
         var texture = new cc.Texture2D();
         texture.initWithImage(image);
-        if (key != null)
+        if ((key != null) && (texture != null))
             this._textures[key] = texture;
         else
             cc.log(cc._LogInfos.textureCache_addUIImage);
@@ -342,17 +343,8 @@ if (cc._renderType === cc._RENDER_TYPE_CANVAS) {
         //remove judge
         var tex = locTexs[url] || locTexs[cc.loader._aliases[url]];
         if (tex) {
-            if(tex.isLoaded()) {
-                cb && cb.call(target, tex);
-                return tex;
-            }
-            else
-            {
-                tex.addEventListener("load", function(){
-                    cb && cb.call(target, tex);
-                }, target);
-                return tex;
-            }
+            cb && cb.call(target, tex);
+            return tex;
         }
 
         tex = locTexs[url] = new cc.Texture2D();
@@ -370,7 +362,6 @@ if (cc._renderType === cc._RENDER_TYPE_CANVAS) {
         return tex;
     };
 
-    _p.addImageAsync = _p.addImage;
     _p = null;
 
 } else {

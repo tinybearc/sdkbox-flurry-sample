@@ -143,10 +143,9 @@ cc.LabelAtlas = cc.AtlasNode.extend(/** @lends cc.LabelAtlas# */{
         var locLoaded = texture.isLoaded();
         this._textureLoaded = locLoaded;
         if (!locLoaded) {
-            this._string = label;
             texture.addEventListener("load", function (sender) {
                 this.initWithTexture(texture, width, height, label.length);
-                this.string = this._string;
+                this.string = label;
                 this.setColor(this._renderCmd._displayedColor);
                 this.dispatchEvent("load");
             }, this);

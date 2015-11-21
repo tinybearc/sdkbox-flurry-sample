@@ -42,9 +42,24 @@
 	</natures>
 	<linkedResources>
 		<link>
-			<name>jsjavabridge</name>
+			<name>Classes</name>
 			<type>2</type>
-			<location>PARENT-2-PROJECT_LOC/js-bindings/bindings/manual/platform/android/java/src</location>
+			<locationURI>COCOS2DX/projects/js/Classes</locationURI>
+		</link>
+		<link>
+			<name>cocos2dx</name>
+			<type>2</type>
+			<locationURI>COCOS2DX/cocos2dx</locationURI>
+		</link>
+		<link>
+			<name>extensions</name>
+			<type>2</type>
+			<locationURI>COCOS2DX/extensions</locationURI>
+		</link>
+		<link>
+			<name>scripting</name>
+			<type>2</type>
+			<locationURI>COCOS2DX/scripting</locationURI>
 		</link>
 	</linkedResources>
 </projectDescription>

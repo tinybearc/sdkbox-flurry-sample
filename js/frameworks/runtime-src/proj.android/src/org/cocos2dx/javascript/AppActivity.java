@@ -28,9 +28,35 @@ package org.cocos2dx.javascript;
 
 import org.cocos2dx.lib.Cocos2dxActivity;
 import org.cocos2dx.lib.Cocos2dxGLSurfaceView;
+import android.content.pm.ActivityInfo;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
+import android.os.Bundle;
+import android.view.WindowManager;
 
-public class AppActivity extends Cocos2dxActivity {
-	
+
+// The name of .so is specified in AndroidMenifest.xml. NativityActivity will load it automatically for you.
+// You can use "System.loadLibrary()" to load other .so files.
+
+public class AppActivity extends Cocos2dxActivity{
+
+    static String hostIPAdress = "0.0.0.0";
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        // TODO Auto-generated method stub
+        super.onCreate(savedInstanceState);
+        
+        if(nativeIsLandScape()) {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
+        } else {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT);
+        }
+        if(nativeIsDebug()){
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON, WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        }
+        hostIPAdress = getHostIpAddress();
+    }
+    
     @Override
     public Cocos2dxGLSurfaceView onCreateView() {
         Cocos2dxGLSurfaceView glSurfaceView = new Cocos2dxGLSurfaceView(this);
@@ -39,4 +65,19 @@ public class AppActivity extends Cocos2dxActivity {
 
         return glSurfaceView;
     }
+
+    public String getHostIpAddress() {
+        WifiManager wifiMgr = (WifiManager) getSystemService(WIFI_SERVICE);
+        WifiInfo wifiInfo = wifiMgr.getConnectionInfo();
+        int ip = wifiInfo.getIpAddress();
+        return ((ip & 0xFF) + "." + ((ip >>>= 8) & 0xFF) + "." + ((ip >>>= 8) & 0xFF) + "." + ((ip >>>= 8) & 0xFF));
+    }
+    
+    public static String getLocalIpAddress() {
+        return hostIPAdress;
+    }
+    
+    private static native boolean nativeIsLandScape();
+    private static native boolean nativeIsDebug();
+    
 }

@@ -73,7 +73,7 @@ cc.ActionManager = cc.Class.extend(/** @lends cc.ActionManager# */{
 
     _searchElementByTarget:function (arr, target) {
         for (var k = 0; k < arr.length; k++) {
-            if (target === arr[k].target)
+            if (target == arr[k].target)
                 return arr[k];
         }
         return null;
@@ -96,9 +96,9 @@ cc.ActionManager = cc.Class.extend(/** @lends cc.ActionManager# */{
      */
     addAction:function (action, target, paused) {
         if(!action)
-            throw new Error("cc.ActionManager.addAction(): action must be non-null");
+            throw "cc.ActionManager.addAction(): action must be non-null";
         if(!target)
-            throw new Error("cc.ActionManager.addAction(): action must be non-null");
+            throw "cc.ActionManager.addAction(): action must be non-null";
 
         //check if the action target already exists
         var element = this._hashTargets[target.__instanceId];
@@ -143,7 +143,7 @@ cc.ActionManager = cc.Class.extend(/** @lends cc.ActionManager# */{
                 element.currentActionSalvaged = true;
 
             element.actions.length = 0;
-            if (this._currentTarget === element && !forceDelete) {
+            if (this._currentTarget == element && !forceDelete) {
                 this._currentTargetSalvaged = true;
             } else {
                 this._deleteHashElement(element);
@@ -162,7 +162,7 @@ cc.ActionManager = cc.Class.extend(/** @lends cc.ActionManager# */{
 
         if (element) {
             for (var i = 0; i < element.actions.length; i++) {
-                if (element.actions[i] === action) {
+                if (element.actions[i] == action) {
                     element.actions.splice(i, 1);
                     break;
                 }
@@ -177,7 +177,7 @@ cc.ActionManager = cc.Class.extend(/** @lends cc.ActionManager# */{
      * @param {object} target
      */
     removeActionByTag:function (tag, target) {
-        if(tag === cc.ACTION_TAG_INVALID)
+        if(tag == cc.ACTION_TAG_INVALID)
             cc.log(cc._LogInfos.ActionManager_addAction);
 
         cc.assert(target, cc._LogInfos.ActionManager_addAction);
@@ -188,7 +188,7 @@ cc.ActionManager = cc.Class.extend(/** @lends cc.ActionManager# */{
             var limit = element.actions.length;
             for (var i = 0; i < limit; ++i) {
                 var action = element.actions[i];
-                if (action && action.getTag() === tag && action.getOriginalTarget() === target) {
+                if (action && action.getTag() === tag && action.getOriginalTarget() == target) {
                     this._removeActionAtIndex(i, element);
                     break;
                 }
@@ -202,7 +202,7 @@ cc.ActionManager = cc.Class.extend(/** @lends cc.ActionManager# */{
      * @return {cc.Action|Null}  return the Action with the given tag on success
      */
     getActionByTag:function (tag, target) {
-        if(tag === cc.ACTION_TAG_INVALID)
+        if(tag == cc.ACTION_TAG_INVALID)
             cc.log(cc._LogInfos.ActionManager_getActionByTag);
 
         var element = this._hashTargets[target.__instanceId];
@@ -287,14 +287,14 @@ cc.ActionManager = cc.Class.extend(/** @lends cc.ActionManager# */{
      * because it uses this, so it can not be static
      */
     purgeSharedManager:function () {
-        cc.director.getScheduler().unscheduleUpdate(this);
+        cc.director.getScheduler().unscheduleUpdateForTarget(this);
     },
 
     //protected
     _removeActionAtIndex:function (index, element) {
         var action = element.actions[index];
 
-        if ((action === element.currentAction) && (!element.currentActionSalvaged))
+        if ((action == element.currentAction) && (!element.currentActionSalvaged))
             element.currentActionSalvaged = true;
 
         element.actions.splice(index, 1);
@@ -303,8 +303,8 @@ cc.ActionManager = cc.Class.extend(/** @lends cc.ActionManager# */{
         if (element.actionIndex >= index)
             element.actionIndex--;
 
-        if (element.actions.length === 0) {
-            if (this._currentTarget === element) {
+        if (element.actions.length == 0) {
+            if (this._currentTarget == element) {
                 this._currentTargetSalvaged = true;
             } else {
                 this._deleteHashElement(element);
@@ -313,17 +313,12 @@ cc.ActionManager = cc.Class.extend(/** @lends cc.ActionManager# */{
     },
 
     _deleteHashElement:function (element) {
-        var ret = false;
         if (element) {
-            if(this._hashTargets[element.target.__instanceId]){
-                delete this._hashTargets[element.target.__instanceId];
-                cc.arrayRemoveObject(this._arrayTargets, element);
-                ret = true;
-            }
+            delete this._hashTargets[element.target.__instanceId];
+            cc.arrayRemoveObject(this._arrayTargets, element);
             element.actions = null;
             element.target = null;
         }
-        return ret;
     },
 
     _actionAllocWithHashElement:function (element) {
@@ -376,7 +371,7 @@ cc.ActionManager = cc.Class.extend(/** @lends cc.ActionManager# */{
 
             // only delete currentTarget if no actions were scheduled during the cycle (issue #481)
             if (this._currentTargetSalvaged && locCurrTarget.actions.length === 0) {
-                this._deleteHashElement(locCurrTarget) && elt--;
+                this._deleteHashElement(locCurrTarget);
             }
         }
     }

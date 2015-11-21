@@ -83,11 +83,8 @@ ccui.ListView = ccui.ScrollView.extend(/** @lends ccui.ListView# */{
      * @param {ccui.Widget} model
      */
     setItemModel: function (model) {
-        if (!model){
-            cc.log("Can't set a null to item model!");
+        if (!model)
             return;
-        }
-
         this._model = model;
     },
 
@@ -116,80 +113,104 @@ ccui.ListView = ccui.ScrollView.extend(/** @lends ccui.ListView# */{
     },
 
     _remedyLayoutParameter: function (item) {
-        cc.assert(null != item, "ListView Item can't be nil!");
-
-        var linearLayoutParameter = item.getLayoutParameter();
-        var isLayoutParameterExists = true;
-        if (!linearLayoutParameter) {
-            linearLayoutParameter = new ccui.LinearLayoutParameter();
-            isLayoutParameterExists = false;
-        }
-        var itemIndex = this.getIndex(item);
+        if (!item)
+            return;
+        var llp;
         switch (this.direction) {
             case ccui.ScrollView.DIR_VERTICAL:
-                this._remedyVerticalLayoutParameter(linearLayoutParameter, itemIndex);
+                llp = item.getLayoutParameter();
+                if (!llp) {
+                    var defaultLp = new ccui.LinearLayoutParameter();
+                    switch (this._gravity) {
+                        case ccui.ListView.GRAVITY_LEFT:
+                            defaultLp.setGravity(ccui.LinearLayoutParameter.LEFT);
+                            break;
+                        case ccui.ListView.GRAVITY_RIGHT:
+                            defaultLp.setGravity(ccui.LinearLayoutParameter.RIGHT);
+                            break;
+                        case ccui.ListView.GRAVITY_CENTER_HORIZONTAL:
+                            defaultLp.setGravity(ccui.LinearLayoutParameter.CENTER_HORIZONTAL);
+                            break;
+                        default:
+                            break;
+                    }
+                    if (this.getIndex(item) == 0)
+                        defaultLp.setMargin(ccui.MarginZero());
+                    else
+                        defaultLp.setMargin(new ccui.Margin(0.0, this._itemsMargin, 0.0, 0.0));
+                    item.setLayoutParameter(defaultLp);
+                } else {
+                    if (this.getIndex(item) == 0)
+                        llp.setMargin(ccui.MarginZero());
+                    else
+                        llp.setMargin(new ccui.Margin(0, this._itemsMargin, 0, 0));
+                    switch (this._gravity) {
+                        case ccui.ListView.GRAVITY_LEFT:
+                            llp.setGravity(ccui.LinearLayoutParameter.LEFT);
+                            break;
+                        case ccui.ListView.GRAVITY_RIGHT:
+                            llp.setGravity(ccui.LinearLayoutParameter.RIGHT);
+                            break;
+                        case ccui.ListView.GRAVITY_CENTER_HORIZONTAL:
+                            llp.setGravity(ccui.LinearLayoutParameter.CENTER_HORIZONTAL);
+                            break;
+                        default:
+                            break;
+                    }
+                }
                 break;
             case ccui.ScrollView.DIR_HORIZONTAL:
-                this._remedyHorizontalLayoutParameter(linearLayoutParameter, itemIndex);
+                llp = item.getLayoutParameter();
+                if (!llp) {
+                    var defaultLp = new ccui.LinearLayoutParameter();
+                    switch (this._gravity) {
+                        case ccui.ListView.GRAVITY_TOP:
+                            defaultLp.setGravity(ccui.LinearLayoutParameter.TOP);
+                            break;
+                        case ccui.ListView.GRAVITY_BOTTOM:
+                            defaultLp.setGravity(ccui.LinearLayoutParameter.BOTTOM );
+                            break;
+                        case ccui.ListView.GRAVITY_CENTER_VERTICAL:
+                            defaultLp.setGravity(ccui.LinearLayoutParameter.CENTER_VERTICAL);
+                            break;
+                        default:
+                            break;
+                    }
+                    if (this.getIndex(item) == 0)
+                        defaultLp.setMargin(ccui.MarginZero());
+                    else
+                        defaultLp.setMargin(new ccui.Margin(this._itemsMargin, 0.0, 0.0, 0.0));
+                    item.setLayoutParameter(defaultLp);
+                } else {
+                    if (this.getIndex(item) == 0)
+                        llp.setMargin(ccui.MarginZero());
+                    else
+                        llp.setMargin(new ccui.Margin(this._itemsMargin, 0.0, 0.0, 0.0));
+                    switch (this._gravity) {
+                        case ccui.ListView.GRAVITY_TOP:
+                            llp.setGravity(ccui.LinearLayoutParameter.TOP);
+                            break;
+                        case ccui.ListView.GRAVITY_BOTTOM:
+                            llp.setGravity(ccui.LinearLayoutParameter.BOTTOM);
+                            break;
+                        case ccui.ListView.GRAVITY_CENTER_VERTICAL:
+                            llp.setGravity(ccui.LinearLayoutParameter.CENTER_VERTICAL);
+                            break;
+                        default:
+                            break;
+                    }
+                }
                 break;
             default:
                 break;
         }
-        if (!isLayoutParameterExists)
-            item.setLayoutParameter(linearLayoutParameter);
-    },
-
-    //@since v3.3
-    _remedyVerticalLayoutParameter: function (layoutParameter, itemIndex) {
-        cc.assert(null != layoutParameter, "Layout parameter can't be nil!");
-
-        switch (this._gravity) {
-            case ccui.ListView.GRAVITY_LEFT:
-                layoutParameter.setGravity(ccui.LinearLayoutParameter.LEFT);
-                break;
-            case ccui.ListView.GRAVITY_RIGHT:
-                layoutParameter.setGravity(ccui.LinearLayoutParameter.RIGHT);
-                break;
-            case ccui.ListView.GRAVITY_CENTER_HORIZONTAL:
-                layoutParameter.setGravity(ccui.LinearLayoutParameter.CENTER_HORIZONTAL);
-                break;
-            default:
-                break;
-        }
-        if (0 === itemIndex)
-            layoutParameter.setMargin(ccui.MarginZero());
-        else
-            layoutParameter.setMargin(new ccui.Margin(0.0, this._itemsMargin, 0.0, 0.0));
-    },
-
-    //@since v3.3
-    _remedyHorizontalLayoutParameter: function (layoutParameter, itemIndex) {
-        cc.assert(null != layoutParameter, "Layout parameter can't be nil!");
-
-        switch (this._gravity) {
-            case ccui.ListView.GRAVITY_TOP:
-                layoutParameter.setGravity(ccui.LinearLayoutParameter.TOP);
-                break;
-            case ccui.ListView.GRAVITY_BOTTOM:
-                layoutParameter.setGravity(ccui.LinearLayoutParameter.BOTTOM);
-                break;
-            case ccui.ListView.GRAVITY_CENTER_VERTICAL:
-                layoutParameter.setGravity(ccui.LinearLayoutParameter.CENTER_VERTICAL);
-                break;
-            default:
-                break;
-        }
-        if (0 === itemIndex)
-            layoutParameter.setMargin(ccui.MarginZero());
-        else
-            layoutParameter.setMargin(new ccui.Margin(this._itemsMargin, 0.0, 0.0, 0.0));
     },
 
     /**
      * Push back a default item(create by a cloned model) into ListView.
      */
     pushBackDefaultItem: function () {
-        if (this._model == null)
+        if (!this._model)
             return;
         var newItem = this._model.clone();
         this._remedyLayoutParameter(newItem);
@@ -202,7 +223,7 @@ ccui.ListView = ccui.ScrollView.extend(/** @lends ccui.ListView# */{
      * @param {Number} index
      */
     insertDefaultItem: function (index) {
-        if (this._model == null)
+        if (!this._model)
             return;
         var newItem = this._model.clone();
         this._items.splice(index, 0, newItem);
@@ -288,7 +309,7 @@ ccui.ListView = ccui.ScrollView.extend(/** @lends ccui.ListView# */{
      */
     removeItem: function (index) {
         var item = this.getItem(index);
-        if (item == null)
+        if (!item)
             return;
         this.removeChild(item, true);
         this._refreshViewDirty = true;
@@ -333,8 +354,6 @@ ccui.ListView = ccui.ScrollView.extend(/** @lends ccui.ListView# */{
      * @returns {Number} the index of item.
      */
     getIndex: function (item) {
-        if(item == null)
-            return -1;
         return this._items.indexOf(item);
     },
 
@@ -343,7 +362,7 @@ ccui.ListView = ccui.ScrollView.extend(/** @lends ccui.ListView# */{
      * @param {ccui.ListView.GRAVITY_LEFT|ccui.ListView.GRAVITY_RIGHT|ccui.ListView.GRAVITY_CENTER_HORIZONTAL|ccui.ListView.GRAVITY_BOTTOM|ccui.ListView.GRAVITY_CENTER_VERTICAL} gravity
      */
     setGravity: function (gravity) {
-        if (this._gravity === gravity)
+        if (this._gravity == gravity)
             return;
         this._gravity = gravity;
         this._refreshViewDirty = true;
@@ -354,7 +373,7 @@ ccui.ListView = ccui.ScrollView.extend(/** @lends ccui.ListView# */{
      * @param {Number} margin
      */
     setItemsMargin: function (margin) {
-        if (this._itemsMargin === margin)
+        if (this._itemsMargin == margin)
             return;
         this._itemsMargin = margin;
         this._refreshViewDirty = true;
@@ -445,7 +464,7 @@ ccui.ListView = ccui.ScrollView.extend(/** @lends ccui.ListView# */{
     },
 
     _selectedItemEvent: function (event) {
-        var eventEnum = (event === ccui.Widget.TOUCH_BEGAN) ? ccui.ListView.ON_SELECTED_ITEM_START : ccui.ListView.ON_SELECTED_ITEM_END;
+        var eventEnum = (event == ccui.Widget.TOUCH_BEGAN) ? ccui.ListView.ON_SELECTED_ITEM_START : ccui.ListView.ON_SELECTED_ITEM_END;
         if(this._listViewEventSelector){
             if (this._listViewEventListener)
                 this._listViewEventSelector.call(this._listViewEventListener, this, eventEnum);
@@ -464,10 +483,10 @@ ccui.ListView = ccui.ScrollView.extend(/** @lends ccui.ListView# */{
      */
     interceptTouchEvent: function (eventType, sender, touch) {
         ccui.ScrollView.prototype.interceptTouchEvent.call(this, eventType, sender, touch);
-        if (eventType !== ccui.Widget.TOUCH_MOVED) {
+        if (eventType != ccui.Widget.TOUCH_MOVED) {
             var parent = sender;
             while (parent) {
-                if (parent && parent.getParent() === this._innerContainer) {
+                if (parent && parent.getParent() == this._innerContainer) {
                     this._curSelectedIndex = this.getIndex(parent);
                     break;
                 }
