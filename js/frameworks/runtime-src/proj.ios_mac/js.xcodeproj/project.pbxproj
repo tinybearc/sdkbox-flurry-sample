@@ -602,6 +602,9 @@
 					"\"PluginFlurryAnalytics.framework\"",
 				);
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_CFLAGS = (
+					-DSDKBOX_ENABLED,
+				);
 				OTHER_LDFLAGS = (
 					-fobjc-arc,
 				);
@@ -633,7 +636,10 @@
 					"\"sdkbox.framework\"",
 					"\"PluginFlurryAnalytics.framework\"",
 				);
-				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				OTHER_CFLAGS = (
+					"-DNS_BLOCK_ASSERTIONS=1",
+					-DSDKBOX_ENABLED,
+				);
 				OTHER_LDFLAGS = (
 					-fobjc-arc,
 				);
@@ -671,6 +677,9 @@
 					" ../../../../cocos2d-x-3.6-lib/prebuilt/ios",
 					"\"sdkbox.framework\"",
 					"\"PluginFlurryAnalytics.framework\"",
+				);
+				OTHER_CFLAGS = (
+					-DSDKBOX_ENABLED,
 				);
 				OTHER_LDFLAGS = (
 					"",
@@ -711,6 +720,9 @@
 					" ../../../../cocos2d-x-3.6-lib/prebuilt/ios",
 					"\"sdkbox.framework\"",
 					"\"PluginFlurryAnalytics.framework\"",
+				);
+				OTHER_CFLAGS = (
+					-DSDKBOX_ENABLED,
 				);
 				OTHER_LDFLAGS = (
 					"",
